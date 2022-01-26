@@ -11,7 +11,7 @@
   "minimumCoreVersion": "0.9",
   "dependencies": [
     {
-      "name": "foundryvtt-tor2e",
+      "name": "tor2e",
       "type": "system"
     }
   ],
