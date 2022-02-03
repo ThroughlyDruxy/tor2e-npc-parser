@@ -1,3 +1,6 @@
+import { textInput } from './text-input.js';
+import { tor2eParser } from './parser.js';
+
 console.log('Hello! This is from tor2e parser!!!!');
 
 class TOR2eParser {
@@ -32,13 +35,15 @@ class TOR2eParser {
     parserBtn.innerHTML = `<i id="tor2e-button" class="fas fa-list"></i>Parse Statblock`;
 
     // Do stuff here
-    // parserBtn.onclick
+    parserBtn.addEventListener('click', textInput);
 
     const createEntityButton =
       footer.getElementsByClassName('create-entity')[0];
     footer.insertBefore(parserBtn, createEntityButton);
   }
 }
+
+///// HOOKS /////
 
 Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {
   registerPackageDebugFlag(TOR2eParser.ID);
