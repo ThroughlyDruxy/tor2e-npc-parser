@@ -22,6 +22,6 @@
       "path": "lang/en.json"
     }
   ],
-  "esmodules": ["modules/main.js"],
+  "scripts": ["scripts/main.js"],
   "styles": ["styles/main.css"]
 }
