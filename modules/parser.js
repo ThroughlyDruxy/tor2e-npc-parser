@@ -2,6 +2,7 @@
 export function tor2eParser(input) {
   console.log(`TOR2E || tor2eParser() was called`);
   const originalText = input.find('textarea#text-input').val();
+  const originalTextArr = originalText.split('\n');
 
   const npcData = {
     type: 'adversary',
@@ -43,12 +44,14 @@ export function tor2eParser(input) {
   };
 
   // Gets name and add it to npcData
-  const nameArr = originalText.match(/^[A-Z]*[a-z]* *[A-Z]*[a-z]*$/m);
-  npcData.name = nameArr[0];
+  console.log(`TOR 2E NPC PARSER || parsing Name`);
+  npcData.name = originalTextArr[0];
+  console.log(npcData.name);
 
   // Get description
-  let nameFirst = nameArr[0];
-  let nameCaps = originalText.match(/^[A-Z]* *[A-Z]*$/m);
+  console.log(`TOR 2E NPC PARSER || parsing Description`);
+  let nameFirst = originalTextArr[0];
+  let nameCaps = originalText.match(nameFirst.toUpperCase());
   nameCaps = nameCaps[0];
 
   if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
@@ -67,14 +70,16 @@ export function tor2eParser(input) {
   }
 
   // Gets Distinctive Features and add them to the items array
+  console.log(`TOR 2E NPC PARSER || parsing Distinctive Features`);
   const distinctiveFeatureArr = originalText.match(
     /^[A-Z]*[a-z]*, *[A-Z]*[a-z]*$/m
   );
   const [featureOne, featureTwo] = distinctiveFeatureArr[0].split(', ');
-  npcData.items.push(buildItem(featureOne, 'trait'));
-  npcData.items.push(buildItem(featureTwo, 'trait'));
+  npcData.items.push(buildItem(featureOne, 'trait', ''));
+  npcData.items.push(buildItem(featureTwo, 'trait', ''));
 
-  // Gets array containing attribute level, might, resolve, and armour
+  // Gets array containing attribute level, might, resolve, and parry
+  console.log(`TOR 2E NPC PARSER || parsing Level, Might, Hate, and Parry`);
   const attEndMigHateParArmArray = originalText.match(/\d{1,3}$/gm);
 
   // Add level, might, resolve, and parry to npcData
@@ -87,10 +92,29 @@ export function tor2eParser(input) {
   npcData.data.hate.max = attEndMigHateParArmArray[3];
   npcData.data.parry.value = attEndMigHateParArmArray[4];
 
+  ///// FELL ABILITIES /////
+  console.log(`TOR 2E NPC PARSER || parsing Fell Abilities`);
+  let allFellAbilitiesArr = originalText.match(/FELL ABILITIES: (\D*\d*)+/gm);
+  allFellAbilitiesArr = allFellAbilitiesArr[0].replace('FELL ABILITIES: ', '');
+  allFellAbilitiesArr = allFellAbilitiesArr.split(/\.\n/gm);
+
+  for (let i = 0; i < allFellAbilitiesArr.length; i++) {
+    allFellAbilitiesArr[i] = allFellAbilitiesArr[i].replace('\n', ' ');
+    // Get name
+    const [fellAbilitiesName] = allFellAbilitiesArr[i].split('.');
+    console.log(fellAbilitiesName);
+    // Get description
+    const [, fellAbilitiesDescription] = allFellAbilitiesArr[i].split('.');
+
+    npcData.items.push(
+      buildItem(fellAbilitiesName, 'fell-ability', fellAbilitiesDescription)
+    );
+  }
+
   Actor.create(npcData);
 }
 
-function buildItem(name, type) {
+function buildItem(name, type, description) {
   const distinctiveFeatureData = {
     name: '',
     type: 'trait',
@@ -111,10 +135,41 @@ function buildItem(name, type) {
     flags: {},
   };
 
-  distinctiveFeatureData.name = name;
+  const fellAbilityData = {
+    name: '',
+    type: 'fell-ability',
+    img: 'systems/tor2e/assets/images/icons/adversary_fell-ability.png',
+    data: {
+      description: {
+        value: '',
+        type: 'String',
+        label: 'tor2e.common.description',
+      },
+      active: {
+        value: false,
+        type: 'Boolean',
+        label: 'tor2e.fellAbilities.details.active',
+      },
+      cost: {
+        value: 0,
+        type: 'Number',
+        label: 'tor2e.fellAbilities.details.cost',
+      },
+    },
+    effects: [],
+    flags: {},
+  };
 
-  return distinctiveFeatureData;
-  console.log(`${distinctiveFeatureData} added to actor`);
+  if (type === 'trait') {
+    distinctiveFeatureData.name = name;
+    distinctiveFeatureData.type = type;
+    return distinctiveFeatureData;
+  } else if (type === 'fell-ability') {
+    fellAbilityData.name = name;
+    fellAbilityData.type = type;
+    fellAbilityData.data.description.value = description;
+    return fellAbilityData;
+  }
 }
 
 // Hooks.on('createItem', () => {
