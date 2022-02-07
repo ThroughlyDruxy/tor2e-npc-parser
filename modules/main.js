@@ -1,16 +1,9 @@
+import { tor2eParser } from './parser.js';
+
 console.log('Hello! This is from tor2e parser!!!!');
 
 class TOR2eParser {
-  // static ID = 'tor2e-npc-parser';
-
-  // static FLAGS = {
-  //   TOR2ePARSER: 'parser',
-  // };
-
-  // static TEMPLATES = {
-  //   TOR2EPARSER: `modules/${this.ID}/templates/tor2e-npc-parser.hbs`,
-  // };
-
+  static ID = 'tor2e-npc-parser';
   // Add a log helper to ToDoList
   static log(force, ...args) {
     const shouldLog =
@@ -56,7 +49,7 @@ async function textInputDialog() {
       go: {
         icon: '<i class="fas fa-check"></i>',
         label: 'Go',
-        callback: html => tor2eParser(html), // undefined here
+        callback: html => tor2eParser(html),
       },
       cancel: {
         icon: '<i class="fas fa-times"></i>',
@@ -67,12 +60,6 @@ async function textInputDialog() {
     default: 'go',
   });
   dialog.render(true);
-}
-
-///// Parser /////
-function tor2eParser(input) {
-  console.log(`TOR2E || tor2eParser() was called`);
-  const originalText = input.find('textarea#text-input').val();
 }
 
 ///// HOOKS /////
