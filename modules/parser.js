@@ -14,6 +14,9 @@ export function tor2eParser(input) {
         value: null,
         max: null,
       },
+      description: {
+        value: '',
+      },
       might: {
         value: null,
         max: null,
@@ -39,26 +42,42 @@ export function tor2eParser(input) {
     items: [],
   };
 
-  const itemData = {};
-
   // Gets name and add it to npcData
   const nameArr = originalText.match(/^[A-Z]*[a-z]* *[A-Z]*[a-z]*$/m);
   npcData.name = nameArr[0];
 
-  // Gets Distinctive Features
-  ///// fix this /////
+  // Get description
+  let nameFirst = nameArr[0];
+  let nameCaps = originalText.match(/^[A-Z]* *[A-Z]*$/m);
+  nameCaps = nameCaps[0];
+
+  if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
+    const betweenNamesReg = new RegExp(nameFirst + '(\\D)+ ' + nameCaps, 'g');
+    const mainDescriptionReg = /^\D*\n/;
+    const descriptionArray = originalText.match(mainDescriptionReg);
+    let description = descriptionArray[0];
+
+    description = description.replace(/\n/gm, ' ');
+    description = description.match(betweenNamesReg);
+    description = description[0];
+    description = description.replace(`${nameFirst} `, '');
+    description = description.replace(` ${nameCaps}`, '');
+
+    npcData.data.description.value = description;
+  }
+
+  // Gets Distinctive Features and add them to the items array
   const distinctiveFeatureArr = originalText.match(
     /^[A-Z]*[a-z]*, *[A-Z]*[a-z]*$/m
   );
   const [featureOne, featureTwo] = distinctiveFeatureArr[0].split(', ');
+  npcData.items.push(buildItem(featureOne, 'trait'));
+  npcData.items.push(buildItem(featureTwo, 'trait'));
 
   // Gets array containing attribute level, might, resolve, and armour
   const attEndMigHateParArmArray = originalText.match(/\d{1,3}$/gm);
-  console.log(attEndMigHateParArmArray);
 
-  const [attributeLevel, endurance, might, hate, parry, armour] =
-    attEndMigHateParArmArray;
-
+  // Add level, might, resolve, and parry to npcData
   npcData.data.attributeLevel.value = attEndMigHateParArmArray[0];
   npcData.data.endurance.value = attEndMigHateParArmArray[1];
   npcData.data.endurance.max = attEndMigHateParArmArray[1];
@@ -68,15 +87,34 @@ export function tor2eParser(input) {
   npcData.data.hate.max = attEndMigHateParArmArray[3];
   npcData.data.parry.value = attEndMigHateParArmArray[4];
 
-  buildNPC(npcData);
+  Actor.create(npcData);
 }
 
-function buildNPC(data) {
-  Actor.create(data);
-}
+function buildItem(name, type) {
+  const distinctiveFeatureData = {
+    name: '',
+    type: 'trait',
+    img: 'systems/tor2e/assets/images/icons/distinctive_feature.png',
+    data: {
+      description: {
+        value: '',
+        type: 'String',
+        label: 'tor2e.common.description',
+      },
+      group: {
+        value: 'distinctiveFeature',
+        type: 'String',
+        label: 'tor2e.traits.details.traitGroup',
+      },
+    },
+    effects: [],
+    flags: {},
+  };
 
-function buildItem(data) {
-  Item.create(data);
+  distinctiveFeatureData.name = name;
+
+  return distinctiveFeatureData;
+  console.log(`${distinctiveFeatureData} added to actor`);
 }
 
 // Hooks.on('createItem', () => {
