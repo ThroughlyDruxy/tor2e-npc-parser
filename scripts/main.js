@@ -1,18 +1,15 @@
-import { textInput } from './text-input.js';
-import { tor2eParser } from './parser.js';
-
 console.log('Hello! This is from tor2e parser!!!!');
 
 class TOR2eParser {
-  static ID = 'tor2e-npc-parser';
+  // static ID = 'tor2e-npc-parser';
 
-  static FLAGS = {
-    TOR2ePARSER: 'parser',
-  };
+  // static FLAGS = {
+  //   TOR2ePARSER: 'parser',
+  // };
 
-  static TEMPLATES = {
-    TOR2EPARSER: `modules/${this.ID}/templates/tor2e-npc-parser.hbs`,
-  };
+  // static TEMPLATES = {
+  //   TOR2EPARSER: `modules/${this.ID}/templates/tor2e-npc-parser.hbs`,
+  // };
 
   // Add a log helper to ToDoList
   static log(force, ...args) {
@@ -35,7 +32,7 @@ class TOR2eParser {
     parserBtn.innerHTML = `<i id="tor2e-button" class="fas fa-list"></i>Parse Statblock`;
 
     // Do stuff here
-    parserBtn.addEventListener('click', textInput);
+    parserBtn.addEventListener('click', textInputDialog);
 
     const createEntityButton =
       footer.getElementsByClassName('create-entity')[0];
@@ -43,51 +40,23 @@ class TOR2eParser {
   }
 }
 
-///// Dialog box for input /////
-class TOR2eDialog extends FormApplication {
-  constructor(object, options) {
-    super(object, options);
-  }
-
-  static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      template: 'modules/tor2e-npc-parser/templates/tor2e-npc-parser.hbs',
-    });
-  }
-
-  getData(options = {}) {
-    return super.getData();
-  }
-
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    let textArea = html.getElementbyId('text-input');
-    textArea.change(this._onTextChanged.bind(this));
-  }
-
-  async _updateObject(event, formData) {
-    return;
-  }
-}
-
 ///// Creates dialog and takes data to send to tor2eParser /////
-async function textInput() {
-  console.log('textInput() called');
+async function textInputDialog() {
+  console.log('textInputDialog() called');
 
   const html = await renderTemplate(
     'modules/tor2e-npc-parser/templates/tor2e-npc-parser.hbs',
-    { originalText: '' }
+    {}
   );
 
   const dialog = new Dialog({
-    title: 'TOR2e NPC Parser',
+    title: 'TOR 2e NPC Parser',
     content: html,
     buttons: {
       go: {
         icon: '<i class="fas fa-check"></i>',
         label: 'Go',
-        callback: () => tor2eParser(originalText), // undefined here
+        callback: html => tor2eParser(html), // undefined here
       },
       cancel: {
         icon: '<i class="fas fa-times"></i>',
@@ -95,19 +64,15 @@ async function textInput() {
         callback: () => console.log('Chose cancel'),
       },
     },
-    default: 'cancel',
-    render: html => console.log('TOR2E | Dialog rendered'),
-    close: html => console.log(`TOR2E | Dialog closed.`),
+    default: 'go',
   });
-
   dialog.render(true);
 }
 
 ///// Parser /////
-function tor2eParser(strToParse) {
-  console.log(`TOR2E || tor2eParser was called`);
-  console.log(typeof strToParse);
-  console.log(strToParse);
+function tor2eParser(input) {
+  console.log(`TOR2E || tor2eParser() was called`);
+  const originalText = input.find('textarea#text-input').val();
 }
 
 ///// HOOKS /////

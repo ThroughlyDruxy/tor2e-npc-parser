@@ -1,4 +1,4 @@
-import { tor2eParser } from './parser.js';
+import { tor2eParser } from './parser.js.js';
 
 class TOR2eDialog extends FormApplication {
   constructor(object, options) {
