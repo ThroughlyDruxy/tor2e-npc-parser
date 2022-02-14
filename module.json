@@ -1,6 +1,6 @@
 {
   "name": "tor2e-npc-parser",
-  "title": "TOR 2e NPC parser",
+  "title": "TOR 2e NPC Parser",
   "description": "Creates an NPC from a copy and pasted statblock.",
   "authors": [
     {
