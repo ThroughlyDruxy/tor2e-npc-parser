@@ -4,7 +4,7 @@ import { buildItem } from './buildItem.js';
 export function tor2eParser(input) {
   console.log(`TOR2E | tor2eParser() was called`);
 
-  const originalText = input.find('textarea#text-input').val();
+  let originalText = input.find('textarea#text-input').val();
   const originalTextArr = originalText.split('\n');
 
   const npcData = {
@@ -82,17 +82,51 @@ export function tor2eParser(input) {
 
   // Gets array containing attribute level, might, resolve, and parry
   console.log(`TOR 2E NPC PARSER | parsing Level, Might, Hate, and Parry`);
-  const attEndMigHateParArmArray = originalText.match(/\d{1,3}$/gm);
+  const attEndMigHateParArmArray = originalText.match(/\d+$/gm);
 
   // Add level, might, resolve, and parry to npcData
-  npcData.data.attributeLevel.value = attEndMigHateParArmArray[0];
-  npcData.data.endurance.value = attEndMigHateParArmArray[1];
-  npcData.data.endurance.max = attEndMigHateParArmArray[1];
-  npcData.data.might.value = attEndMigHateParArmArray[2];
-  npcData.data.might.max = attEndMigHateParArmArray[2];
-  npcData.data.hate.value = attEndMigHateParArmArray[3];
-  npcData.data.hate.max = attEndMigHateParArmArray[3];
-  npcData.data.parry.value = attEndMigHateParArmArray[4];
+  npcData.data.attributeLevel.value = Number(attEndMigHateParArmArray[0]);
+  npcData.data.endurance.value = Number(attEndMigHateParArmArray[1]);
+  npcData.data.endurance.max = Number(attEndMigHateParArmArray[1]);
+  npcData.data.might.value = Number(attEndMigHateParArmArray[2]);
+  npcData.data.might.max = Number(attEndMigHateParArmArray[2]);
+  npcData.data.hate.value = Number(attEndMigHateParArmArray[3]);
+  npcData.data.hate.max = Number(attEndMigHateParArmArray[3]);
+
+  let parryIsDash = false;
+  if (/^—/m.test(originalText)) {
+    originalText = originalText.replace('—', 0);
+    parryIsDash = true;
+  } else {
+    npcData.data.parry.value = Number(attEndMigHateParArmArray[4]);
+  }
+
+  ///// ARMOUR /////
+  if (parryIsDash) {
+    npcData.items.push(
+      buildItem(
+        'Armour',
+        'armour',
+        '',
+        0,
+        0,
+        0,
+        Number(attEndMigHateParArmArray[4])
+      )
+    );
+  } else {
+    npcData.items.push(
+      buildItem(
+        'Armour',
+        'armour',
+        '',
+        0,
+        0,
+        0,
+        Number(attEndMigHateParArmArray[5])
+      )
+    );
+  }
 
   ///// COMBAT PROFICIENCIES /////
   console.log(`TOR 2E NPC PARSER | parsing Combat Proficiencies`);
@@ -101,7 +135,8 @@ export function tor2eParser(input) {
 
   let weaponProfs = originalText.match(weaponProfReg);
   weaponProfs = weaponProfs[0];
-  weaponProfs = weaponProfs.split(',\n');
+  weaponProfs = weaponProfs.split('),');
+  console.log(`TOR 2E NPC Parser | weaponProfs ${weaponProfs}`);
 
   for (let i = 0; i < weaponProfs.length; i++) {
     if (/COMBAT PROFICIENCIES/.test(weaponProfs[i])) {

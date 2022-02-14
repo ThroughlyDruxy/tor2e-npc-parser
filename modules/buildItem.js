@@ -1,4 +1,12 @@
-export function buildItem(name, type, description, skill, damage, injury) {
+export function buildItem(
+  name,
+  type,
+  description,
+  skill,
+  damage,
+  injury,
+  protection
+) {
   console.log(`TOR 2E NPC PARSER | started buildItem() with ${name}`);
   const distinctiveFeatureData = {
     name: '',
@@ -93,6 +101,26 @@ export function buildItem(name, type, description, skill, damage, injury) {
     },
   };
 
+  const armourData = {
+    name: 'Armour',
+    type: 'armour',
+    img: 'systems/tor2e/assets/images/icons/adversary_armour.png',
+    data: {
+      load: {
+        value: 0,
+      },
+      equipped: {
+        value: false,
+      },
+      protection: {
+        value: 0,
+      },
+      group: {
+        value: 'leather',
+      },
+    },
+  };
+
   if (type === 'trait') {
     distinctiveFeatureData.name = name;
     distinctiveFeatureData.type = type;
@@ -113,7 +141,7 @@ export function buildItem(name, type, description, skill, damage, injury) {
       /axe/i.test(name) ||
       /cudgel/i.test(name) ||
       /knife/i.test(name) ||
-      /club/.test(name)
+      /club/i.test(name)
     ) {
       weaponData.img =
         'systems/tor2e/assets/images/icons/adversary_weapon_close.png';
@@ -146,6 +174,10 @@ export function buildItem(name, type, description, skill, damage, injury) {
       weaponData.data.group = 'swords';
     }
     return weaponData;
+  } else if (type === 'armour') {
+    armourData.name = 'Armour';
+    armourData.data.protection.value = protection;
+    return armourData;
   } else {
     console.log(`Type ${type} not found`);
   }
