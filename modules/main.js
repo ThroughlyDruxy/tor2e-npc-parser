@@ -1,6 +1,6 @@
 import { tor2eParser } from './parser.js';
 
-console.log('Hello! This is from tor2e parser!!!!');
+console.log(`TOR 2e NPC Parser initialized`);
 
 class TOR2eParser {
   static ID = 'tor2e-npc-parser';
