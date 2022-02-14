@@ -1,8 +1,3 @@
-# tor-2e-npc-parser
-
-TOR 2e NPC Parser
-
-
 ## Installation
 
 Install from FoundryVTT setup / Add-on modules / Install module with Manifest URl : https://github.com/ThroughlyDruxy/tor2e-npc-parser/blob/main/module.json
