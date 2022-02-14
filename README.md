@@ -1,6 +1,6 @@
-# tor-2e-compendium-en
+# tor-2e-npc-parser
 
-TOR2E - Unofficial compendium for The One Ring 2nd edition - english version
+TOR 2e NPC Parser
 
 
 ## Installation
