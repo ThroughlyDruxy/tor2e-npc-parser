@@ -74,7 +74,7 @@ export function tor2eParser(input) {
   // Gets Distinctive Features and add them to the items array
   console.log(`TOR 2E NPC PARSER | parsing Distinctive Features`);
   const distinctiveFeatureArr = originalText.match(
-    /^[A-Z]*[a-z]*, *[A-Z]*[a-z]*$/m
+    /[A-Z][a-z]+-*[a-z]+, [A-Z]-*[a-z]+/
   );
   const [featureOne, featureTwo] = distinctiveFeatureArr[0].split(', ');
   npcData.items.push(buildItem(featureOne, 'trait'));
