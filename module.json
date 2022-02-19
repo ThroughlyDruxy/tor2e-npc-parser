@@ -20,6 +20,6 @@
   "esmodules": ["modules/main.js"],
   "styles": ["styles/main.css"]
   "url": "https://github.com/ThroughlyDruxy/tor2e-npc-parser",
-  "manifest": "https://raw.githubusercontent.com/ThroughlyDruxy/tor2e-npc-parser/main/module.json",
+  "manifest": "https://raw.githubusercontent.com/ThroughlyDruxy/tor2e-npc-parser/master/module.json",
   "downlaod": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/releases/tag/v0.0.0-alpha"
 }
