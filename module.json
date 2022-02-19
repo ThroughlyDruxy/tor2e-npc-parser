@@ -8,7 +8,7 @@
     }
   ],
   "version": "0.0.3",
-  "minimumCoreVersion": "9",
+  "minimumCoreVersion": "9.249",
   "system": ["tor2e"],
   "languages": [
     {
