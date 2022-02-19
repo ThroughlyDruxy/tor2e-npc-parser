@@ -21,5 +21,5 @@
   "styles": ["styles/main.css"]
   "url": "https://github.com/ThroughlyDruxy/tor2e-npc-parser",
   "manifest": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/blob/alpha/module.json",
-  "downlaod": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/archive/refs/tags/alpha.zip"
+  "downlaod": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/archive/refs/tags/v0.0.1.zip"
 }
