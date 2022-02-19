@@ -8,13 +8,8 @@
     }
   ],
   "version": "0.0.1",
-  "minimumCoreVersion": "9.249",
-  "dependencies": [
-    {
-      "name": "tor2e",
-      "type": "system"
-    }
-  ],
+  "minimumCoreVersion": "9",
+  "system": ["tor2e"],
   "languages": [
     {
       "lang": "en",
@@ -24,4 +19,7 @@
   ],
   "esmodules": ["modules/main.js"],
   "styles": ["styles/main.css"]
+  "url": "https://github.com/ThroughlyDruxy/tor2e-npc-parser",
+  "manifest": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/blob/alpha/module.json"
+  "downlaod": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/archive/refs/tags/alpha.zip"
 }
