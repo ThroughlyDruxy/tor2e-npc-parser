@@ -13,10 +13,11 @@ This is currently in Alpha and my first project in JavaScript so please be patie
 
 Currently it contains no user-facing error reporting but that will come soon.
 
+## For Loremasters
 Fell Abilities that apply to all of a single type are currently not included and will need to be created and added by LMs.
-  All Orcs should have Hatred (subject) and Hate Sunlight
-  All Trolls should have Hideous Toughness and Dull-Witted
-  All Undead should have Deathless, Heartless, and Strike Fear
+* All Orcs should have Hatred (subject) and Hate Sunlight
+* All Trolls should have Hideous Toughness and Dull-Witted
+* All Undead should have Deathless, Heartless, and Strike Fear
 
 ## License
 The One Ring, Middle-­earth, and The Lord of the Rings and the characters, items, events, and places therein are trademarks or registered trademarks of the Saul Zaentz Company d/b/a Middle-­earth Enterprises (SZC) and are used under license by Sophisticated Games Ltd. and their respective licensees. All rights reserved.
