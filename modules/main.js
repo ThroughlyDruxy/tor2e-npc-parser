@@ -3,18 +3,6 @@ import { tor2eParser } from './parser.js';
 console.log(`TOR 2e NPC Parser initialized`);
 
 class TOR2eParser {
-  static ID = 'tor2e-npc-parser';
-  // Add a log helper to ToDoList
-  static log(force, ...args) {
-    const shouldLog =
-      force ||
-      game.modules.get('_dev-mode')?.api?.getPackageDebugValue(this.ID);
-
-    if (shouldLog) {
-      console.log(this.ID, '|', ...args);
-    }
-  }
-
   static parserButtonVisible() {
     let parserBtn = document.getElementById('tor2e-btn');
     const actorPanel = document.getElementById('actors');
@@ -63,10 +51,6 @@ async function textInputDialog() {
 }
 
 ///// HOOKS /////
-Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => {
-  registerPackageDebugFlag(TOR2eParser.ID);
-});
-
 Hooks.on('renderSidebarTab', (app, html) => {
   if (app.options.id == 'actors') {
     TOR2eParser.parserButtonVisible();
