@@ -49,7 +49,12 @@ export async function tor2eParser(input) {
 
   ///// NAME /////
   console.log(`TOR 2E NPC PARSER | parsing Name`);
-  npcData.name = nameFirst;
+  let nameArray = nameFirst.split(' ');
+  for (let i = 0; i < nameArray.length; i++) {
+    nameArray[i] =
+      nameArray[i][0].toUpperCase() + nameArray[i].substr(1).toLowerCase();
+  }
+  npcData.name = nameArray.join(' ');
 
   ///// DESCRIPTION /////
   console.log(`TOR 2E NPC PARSER | parsing Description`);
@@ -60,20 +65,27 @@ export async function tor2eParser(input) {
     const mainDescriptionReg = /^\D*\n/;
     let description = originalText
       .match(mainDescriptionReg)[0]
-      .replace(/\n/gm, ' ')
-      .match(betweenNamesReg)[0]
-      .replace(`${nameFirst} `, '')
-      .replace(` ${nameCaps}`, '');
+      .replace(/\n/gm, ' ');
+    console.log(description.match(betweenNamesReg));
 
-    npcData.data.description.value = description;
+    if (description.match(betweenNamesReg)) {
+      npcData.data.description.value = description
+        .match(betweenNamesReg)[0]
+        .replace(`${nameFirst} `, '')
+        .replace(` ${nameCaps}`, '');
+    } else {
+      ui.notifications.error('Could not parse description.');
+    }
   }
 
   //// ATTRIBUTE LEVEL, MIGHT, HATE, PARRY, ARMOUR /////
-  console.log(`TOR 2E NPC PARSER | parsing Level, Might, Hate, and Parry`);
+  console.log(
+    `TOR 2E NPC PARSER | parsing Level, Endurance, Might, Hate, Parry, and Armour`
+  );
 
-  const attEndMigHateParArmArray = originalText.match(/^–*\+*\d*$/gm);
+  const attEndMigHateParArmArray = originalText.match(/^–*—*\+*\d*$/gm);
 
-  // Add level, might, resolve, and parry to npcData
+  // Add level, endurance, might, resolve, and parry to npcData
   const [attributeLevel, endurance, might, hate, parry, armour] =
     attEndMigHateParArmArray;
   npcData.data.attributeLevel.value = Number(attributeLevel);
