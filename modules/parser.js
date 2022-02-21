@@ -56,8 +56,6 @@ export async function tor2eParser(input) {
   }
   npcData.name = nameArray.join(' ');
 
-  /////
-
   ///// DESCRIPTION /////
   console.log(`TOR 2E NPC PARSER | parsing Description`);
   if (originalText.match(nameFirst.toUpperCase())) {
@@ -164,13 +162,14 @@ export async function tor2eParser(input) {
     .replace('FELL ABILITIES: ', '')
     .split(/\.\n/gm);
 
-  console.log(allFellAbilitiesArr);
   for (let i = 0; i < allFellAbilitiesArr.length; i++) {
     const [fellAbilitiesName, fellAbilitiesDescription] = allFellAbilitiesArr[i]
       .replace('\n', ' ')
       .split('.');
 
-    if (!fellAbilitiesName) {
+    console.log(fellAbilitiesName, fellAbilitiesDescription);
+
+    if (typeof fellAbilitiesDescription !== 'undefined') {
       actor.createEmbeddedDocuments('Item', [
         buildItem(
           fellAbilitiesName,
@@ -184,4 +183,7 @@ export async function tor2eParser(input) {
       );
     }
   }
+
+  ///// FELL ABILITIES BY TYPE /////
+  if (npcData.name.match('Orc')) console.log(`this creature is an orc`);
 }
