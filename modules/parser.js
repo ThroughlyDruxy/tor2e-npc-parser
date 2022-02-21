@@ -1,13 +1,11 @@
 import { buildItem } from './buildItem.js';
 
 ///// Parser /////
-export function tor2eParser(input) {
+export async function tor2eParser(input) {
   console.log(`TOR2E | tor2eParser() was called`);
 
-  let originalText = input.find('textarea#text-input').val();
-  const originalTextArr = originalText.split('\n');
-
   const npcData = {
+    name: 'Generated Actor',
     type: 'adversary',
     img: 'systems/tor2e/assets/images/tokens/token_adversary.png',
     data: {
@@ -46,52 +44,44 @@ export function tor2eParser(input) {
     items: [],
   };
 
-  // Gets name and add it to npcData
+  let originalText = input.find('textarea#text-input').val();
+  const originalTextArr = originalText.split('\n');
+
+  ///// NAME /////
   console.log(`TOR 2E NPC PARSER | parsing Name`);
   npcData.name = originalTextArr[0];
 
-  // Get description
+  ///// DESCRIPTION /////
   console.log(`TOR 2E NPC PARSER | parsing Description`);
   let nameFirst = originalTextArr[0];
-  let nameCaps = originalText.match(nameFirst.toUpperCase());
-  nameCaps = nameCaps[0];
+  let [nameCaps] = originalText.match(nameFirst.toUpperCase());
 
   if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
     const betweenNamesReg = new RegExp(nameFirst + '(\\D)+ ' + nameCaps, 'g');
     const mainDescriptionReg = /^\D*\n/;
-    const descriptionArray = originalText.match(mainDescriptionReg);
-    let description = descriptionArray[0];
-
-    description = description.replace(/\n/gm, ' ');
-    description = description.match(betweenNamesReg);
-    description = description[0];
-    description = description.replace(`${nameFirst} `, '');
-    description = description.replace(` ${nameCaps}`, '');
+    let description = originalText
+      .match(mainDescriptionReg)[0]
+      .replace(/\n/gm, ' ')
+      .match(betweenNamesReg)[0]
+      .replace(`${nameFirst} `, '')
+      .replace(` ${nameCaps}`, '');
 
     npcData.data.description.value = description;
   }
 
-  // Gets Distinctive Features and add them to the items array
-  console.log(`TOR 2E NPC PARSER | parsing Distinctive Features`);
-  const distinctiveFeatureArr = originalText.match(
-    /[A-Z][a-z]+-*[a-z]+, [A-Z]-*[a-z]+/
-  );
-  const [featureOne, featureTwo] = distinctiveFeatureArr[0].split(', ');
-  npcData.items.push(buildItem(featureOne, 'trait'));
-  npcData.items.push(buildItem(featureTwo, 'trait'));
-
-  // Gets array containing attribute level, might, resolve, and parry
+  //// ATTRIBUTE LEVEL, MIGHT, HATE, PARRY, ARMOUR /////
   console.log(`TOR 2E NPC PARSER | parsing Level, Might, Hate, and Parry`);
   const attEndMigHateParArmArray = originalText.match(/\d+$/gm);
 
   // Add level, might, resolve, and parry to npcData
-  npcData.data.attributeLevel.value = Number(attEndMigHateParArmArray[0]);
-  npcData.data.endurance.value = Number(attEndMigHateParArmArray[1]);
-  npcData.data.endurance.max = Number(attEndMigHateParArmArray[1]);
-  npcData.data.might.value = Number(attEndMigHateParArmArray[2]);
-  npcData.data.might.max = Number(attEndMigHateParArmArray[2]);
-  npcData.data.hate.value = Number(attEndMigHateParArmArray[3]);
-  npcData.data.hate.max = Number(attEndMigHateParArmArray[3]);
+  const [attributeLevel, endurance, might, hate] = attEndMigHateParArmArray;
+  npcData.data.attributeLevel.value = Number(attributeLevel);
+  npcData.data.endurance.value = Number(endurance);
+  npcData.data.endurance.max = Number(endurance);
+  npcData.data.might.value = Number(might);
+  npcData.data.might.max = Number(might);
+  npcData.data.hate.value = Number(hate);
+  npcData.data.hate.max = Number(hate);
 
   let parryIsDash = false;
   if (/^—/m.test(originalText)) {
@@ -101,9 +91,11 @@ export function tor2eParser(input) {
     npcData.data.parry.value = Number(attEndMigHateParArmArray[4]);
   }
 
+  let actor = await Actor.create(npcData);
+
   ///// ARMOUR /////
   if (parryIsDash) {
-    npcData.items.push(
+    actor.createEmbeddedDocuments('Item', [
       buildItem(
         'Armour',
         'armour',
@@ -112,10 +104,10 @@ export function tor2eParser(input) {
         0,
         0,
         Number(attEndMigHateParArmArray[4])
-      )
-    );
+      ),
+    ]);
   } else {
-    npcData.items.push(
+    actor.createEmbeddedDocuments('Item', [
       buildItem(
         'Armour',
         'armour',
@@ -124,17 +116,25 @@ export function tor2eParser(input) {
         0,
         0,
         Number(attEndMigHateParArmArray[5])
-      )
-    );
+      ),
+    ]);
   }
+
+  ///// DISTINCTIVE FEATURES /////
+  console.log(`TOR 2E NPC PARSER | parsing Distinctive Features`);
+  const distinctiveFeatureArr = originalText.match(
+    /[A-Z][a-z]+-*[a-z]+, [A-Z][a-z]+-*[a-z]+/
+  );
+  const [featureOne, featureTwo] = distinctiveFeatureArr[0].split(', ');
+  actor.createEmbeddedDocuments('Item', [buildItem(featureOne, 'trait')]);
+  actor.createEmbeddedDocuments('Item', [buildItem(featureTwo, 'trait')]);
 
   ///// COMBAT PROFICIENCIES /////
   console.log(`TOR 2E NPC PARSER | parsing Combat Proficiencies`);
 
   const weaponProfReg = /COMBAT PROFICIENCIES: .*\n.*/;
 
-  let weaponProfs = originalText.match(weaponProfReg);
-  weaponProfs = weaponProfs[0];
+  let [weaponProfs] = originalText.match(weaponProfReg);
   weaponProfs = weaponProfs.split('),');
   console.log(`TOR 2E NPC Parser | weaponProfs ${weaponProfs}`);
 
@@ -151,7 +151,7 @@ export function tor2eParser(input) {
       wepSkillDamageInjuryReg
     );
 
-    npcData.items.push(
+    actor.createEmbeddedDocuments('Item', [
       buildItem(
         weaponName,
         'weapon',
@@ -159,26 +159,27 @@ export function tor2eParser(input) {
         Number(weaponSkill),
         Number(weaponDamage),
         Number(weaponInjury)
-      )
-    );
+      ),
+    ]);
   }
 
   ///// FELL ABILITIES /////
   console.log(`TOR 2E NPC PARSER | parsing Fell Abilities`);
-  let allFellAbilitiesArr = originalText.match(/FELL ABILITIES: (\D*\d*)+/gm);
-  allFellAbilitiesArr = allFellAbilitiesArr[0].replace('FELL ABILITIES: ', '');
-  allFellAbilitiesArr = allFellAbilitiesArr.split(/\.\n/gm);
+  let allFellAbilitiesArr = originalText
+    .match(/FELL ABILITIES: (\D*\d*)+/gm)[0]
+    .replace('FELL ABILITIES: ', '')
+    .split(/\.\n/gm);
 
   for (let i = 0; i < allFellAbilitiesArr.length; i++) {
-    allFellAbilitiesArr[i] = allFellAbilitiesArr[i].replace('\n', ' ');
-    // Get name and description
-    const [fellAbilitiesName, fellAbilitiesDescription] =
-      allFellAbilitiesArr[i].split('.');
-
-    npcData.items.push(
-      buildItem(fellAbilitiesName, 'fell-ability', fellAbilitiesDescription)
-    );
+    const [fellAbilitiesName, fellAbilitiesDescription] = allFellAbilitiesArr[i]
+      .replace('\n', ' ')
+      .split('.');
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        fellAbilitiesName,
+        'fell-ability',
+        fellAbilitiesDescription + '.'
+      ),
+    ]);
   }
-
-  Actor.create(npcData);
 }
