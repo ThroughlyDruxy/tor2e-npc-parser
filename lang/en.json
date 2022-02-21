@@ -1,3 +1,5 @@
 {
-  "TOR2E-NPC-PASER": {}
+  "TOR2E-NPC-PASER": {
+    "titleOfParser": "Paste text here and click Go:"
+  }
 }
