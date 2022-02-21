@@ -75,11 +75,17 @@ export async function tor2eParser(input) {
           .replace(`${nameFirst} `, '')
           .replace(` ${nameCaps}`, '');
       } else {
-        ui.notifications.error('Could not parse description.');
+        ui.notifications.error(
+          game.i18n.localize(
+            'TOR2E-NPC-PARSER.notifications.descriptionNotFound'
+          )
+        );
       }
     }
   } else {
-    ui.notifications.error('Could not parse description');
+    ui.notifications.error(
+      game.i18n.localize('TOR2E-NPC-PARSER.notifications.descriptionNotFound')
+    );
   }
 
   //// ATTRIBUTE LEVEL, MIGHT, HATE, PARRY, ARMOUR /////
@@ -178,8 +184,10 @@ export async function tor2eParser(input) {
         ),
       ]);
     } else {
-      ui.notifications.info(
-        'No fell abilities were found for this creature. Please double check to make sure this is correct.'
+      ui.notifications.error(
+        game.i18n.localize(
+          'TOR2E-NPC-PARSER.notifications.fellAbilitiesNotFound'
+        )
       );
     }
   }
@@ -194,7 +202,8 @@ export async function tor2eParser(input) {
       ),
     ]);
     ui.notifications.info(
-      'Hate Sunlight was automatically added without description based on creature type.'
+      'Hate Sunlight ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (npcData.name.match('troll|Troll')) {
     actor.createEmbeddedDocuments('Item', [
@@ -212,7 +221,8 @@ export async function tor2eParser(input) {
       ),
     ]);
     ui.notifications.info(
-      'Hideous Toughness and Dull-witted were automatically added without description based on creature type.'
+      'Hideous Toughness and Dull-witted ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (npcData.name.match('wight|Marsh|Wraith')) {
     actor.createEmbeddedDocuments('Item', [
@@ -237,7 +247,8 @@ export async function tor2eParser(input) {
       ),
     ]);
     ui.notifications.info(
-      'Deathless, Heartless, and Strike Fear were automatically added without description based on creature type.'
+      'Deathless, Heartless, and Strike Fear ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (npcData.name.match('Wolf|Hound')) {
     actor.createEmbeddedDocuments('Item', [
@@ -248,7 +259,8 @@ export async function tor2eParser(input) {
       ),
     ]);
     ui.notifications.info(
-      'Great Leap was automatically added without description based on creature type.'
+      'Great Leap ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   }
 }
