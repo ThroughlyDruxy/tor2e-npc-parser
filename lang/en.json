@@ -1,3 +1,12 @@
 {
-  "TOR2E-NPC-PASER": {}
+  "TOR2E-NPC-PARSER": {
+    "dialog": {
+      "instruction": "Paste text here and click Go:"
+    },
+    "notifications": {
+      "descriptionNotFound": "Could not parse description",
+      "fellAbilitiesNotFound": "No fell abilities were found for this creature. Please double check to make sure this is correct.",
+      "fellAbilitiesByType": "was automatically added without description based on creature type."
+    }
+  }
 }

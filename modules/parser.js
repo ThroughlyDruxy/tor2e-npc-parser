@@ -1,13 +1,11 @@
 import { buildItem } from './buildItem.js';
 
 ///// Parser /////
-export function tor2eParser(input) {
+export async function tor2eParser(input) {
   console.log(`TOR2E | tor2eParser() was called`);
 
-  let originalText = input.find('textarea#text-input').val();
-  const originalTextArr = originalText.split('\n');
-
   const npcData = {
+    name: 'Generated Actor',
     type: 'adversary',
     img: 'systems/tor2e/assets/images/tokens/token_adversary.png',
     data: {
@@ -46,97 +44,96 @@ export function tor2eParser(input) {
     items: [],
   };
 
-  // Gets name and add it to npcData
+  let originalText = input.find('textarea#text-input').val();
+
+  ///// NAME /////
+  const [nameFirst] = originalText.split('\n');
   console.log(`TOR 2E NPC PARSER | parsing Name`);
-  npcData.name = originalTextArr[0];
+  let nameArray = nameFirst.split(' ');
+  for (let i = 0; i < nameArray.length; i++) {
+    nameArray[i] =
+      nameArray[i][0].toUpperCase() + nameArray[i].substr(1).toLowerCase();
+  }
+  npcData.name = nameArray.join(' ');
 
-  // Get description
+  ///// DESCRIPTION /////
   console.log(`TOR 2E NPC PARSER | parsing Description`);
-  let nameFirst = originalTextArr[0];
-  let nameCaps = originalText.match(nameFirst.toUpperCase());
-  nameCaps = nameCaps[0];
+  if (originalText.match(nameFirst.toUpperCase())) {
+    let [nameCaps] = originalText.match(nameFirst.toUpperCase());
 
-  if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
-    const betweenNamesReg = new RegExp(nameFirst + '(\\D)+ ' + nameCaps, 'g');
-    const mainDescriptionReg = /^\D*\n/;
-    const descriptionArray = originalText.match(mainDescriptionReg);
-    let description = descriptionArray[0];
+    if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
+      const betweenNamesReg = new RegExp(nameFirst + '(\\D)+ ' + nameCaps, 'g');
+      const mainDescriptionReg = /^\D*\n/;
+      let description = originalText
+        .match(mainDescriptionReg)[0]
+        .replace(/\n/gm, ' ');
 
-    description = description.replace(/\n/gm, ' ');
-    description = description.match(betweenNamesReg);
-    description = description[0];
-    description = description.replace(`${nameFirst} `, '');
-    description = description.replace(` ${nameCaps}`, '');
-
-    npcData.data.description.value = description;
-  }
-
-  // Gets Distinctive Features and add them to the items array
-  console.log(`TOR 2E NPC PARSER | parsing Distinctive Features`);
-  const distinctiveFeatureArr = originalText.match(
-    /[A-Z][a-z]+-*[a-z]+, [A-Z]-*[a-z]+/
-  );
-  const [featureOne, featureTwo] = distinctiveFeatureArr[0].split(', ');
-  npcData.items.push(buildItem(featureOne, 'trait'));
-  npcData.items.push(buildItem(featureTwo, 'trait'));
-
-  // Gets array containing attribute level, might, resolve, and parry
-  console.log(`TOR 2E NPC PARSER | parsing Level, Might, Hate, and Parry`);
-  const attEndMigHateParArmArray = originalText.match(/\d+$/gm);
-
-  // Add level, might, resolve, and parry to npcData
-  npcData.data.attributeLevel.value = Number(attEndMigHateParArmArray[0]);
-  npcData.data.endurance.value = Number(attEndMigHateParArmArray[1]);
-  npcData.data.endurance.max = Number(attEndMigHateParArmArray[1]);
-  npcData.data.might.value = Number(attEndMigHateParArmArray[2]);
-  npcData.data.might.max = Number(attEndMigHateParArmArray[2]);
-  npcData.data.hate.value = Number(attEndMigHateParArmArray[3]);
-  npcData.data.hate.max = Number(attEndMigHateParArmArray[3]);
-
-  let parryIsDash = false;
-  if (/^—/m.test(originalText)) {
-    originalText = originalText.replace('—', 0);
-    parryIsDash = true;
+      if (description.match(betweenNamesReg)) {
+        npcData.data.description.value = description
+          .match(betweenNamesReg)[0]
+          .replace(`${nameFirst} `, '')
+          .replace(` ${nameCaps}`, '');
+      } else {
+        ui.notifications.error(
+          game.i18n.localize(
+            'TOR2E-NPC-PARSER.notifications.descriptionNotFound'
+          )
+        );
+      }
+    }
   } else {
-    npcData.data.parry.value = Number(attEndMigHateParArmArray[4]);
+    ui.notifications.error(
+      game.i18n.localize('TOR2E-NPC-PARSER.notifications.descriptionNotFound')
+    );
   }
+
+  //// ATTRIBUTE LEVEL, MIGHT, HATE, PARRY, ARMOUR /////
+  console.log(
+    `TOR 2E NPC PARSER | parsing Level, Endurance, Might, Hate, Parry, and Armour`
+  );
+
+  const attEndMigHateParArmArray = originalText.match(/^–*—*\+*\d*$/gm);
+
+  // Add level, endurance, might, resolve, and parry to npcData
+  const [attributeLevel, endurance, might, hate, parry, armour] =
+    attEndMigHateParArmArray;
+  npcData.data.attributeLevel.value = Number(attributeLevel);
+  npcData.data.endurance.value = Number(endurance);
+  npcData.data.endurance.max = Number(endurance);
+  npcData.data.might.value = Number(might);
+  npcData.data.might.max = Number(might);
+  npcData.data.hate.value = Number(hate);
+  npcData.data.hate.max = Number(hate);
+
+  if (/\d/.test(parry)) {
+    npcData.data.parry.value = Number(attEndMigHateParArmArray[4]);
+  } else {
+    npcData.data.parry.value = 0;
+  }
+
+  let actor = await Actor.create(npcData);
 
   ///// ARMOUR /////
-  if (parryIsDash) {
-    npcData.items.push(
-      buildItem(
-        'Armour',
-        'armour',
-        '',
-        0,
-        0,
-        0,
-        Number(attEndMigHateParArmArray[4])
-      )
-    );
-  } else {
-    npcData.items.push(
-      buildItem(
-        'Armour',
-        'armour',
-        '',
-        0,
-        0,
-        0,
-        Number(attEndMigHateParArmArray[5])
-      )
-    );
-  }
+  actor.createEmbeddedDocuments('Item', [
+    buildItem('Armour', 'armour', '', 0, 0, 0, Number(armour)),
+  ]);
+
+  ///// DISTINCTIVE FEATURES /////
+  console.log(`TOR 2E NPC PARSER | parsing Distinctive Features`);
+  const distinctiveFeatureArr = originalText.match(
+    /[A-Z][a-z]+-*[a-z]+, [A-Z][a-z]+-*[a-z]+/
+  );
+  const [featureOne, featureTwo] = distinctiveFeatureArr[0].split(', ');
+  actor.createEmbeddedDocuments('Item', [buildItem(featureOne, 'trait')]);
+  actor.createEmbeddedDocuments('Item', [buildItem(featureTwo, 'trait')]);
 
   ///// COMBAT PROFICIENCIES /////
   console.log(`TOR 2E NPC PARSER | parsing Combat Proficiencies`);
 
   const weaponProfReg = /COMBAT PROFICIENCIES: .*\n.*/;
 
-  let weaponProfs = originalText.match(weaponProfReg);
-  weaponProfs = weaponProfs[0];
+  let [weaponProfs] = originalText.match(weaponProfReg);
   weaponProfs = weaponProfs.split('),');
-  console.log(`TOR 2E NPC Parser | weaponProfs ${weaponProfs}`);
 
   for (let i = 0; i < weaponProfs.length; i++) {
     if (/COMBAT PROFICIENCIES/.test(weaponProfs[i])) {
@@ -144,14 +141,13 @@ export function tor2eParser(input) {
     }
     // Weapon name
     let [weaponName] = weaponProfs[i].match('\\D*');
-
     const wepSkillDamageInjuryReg = /\d+/g;
     // Weapon skill, damage, and injury
     let [weaponSkill, weaponDamage, weaponInjury] = weaponProfs[i].match(
       wepSkillDamageInjuryReg
     );
 
-    npcData.items.push(
+    actor.createEmbeddedDocuments('Item', [
       buildItem(
         weaponName,
         'weapon',
@@ -159,26 +155,108 @@ export function tor2eParser(input) {
         Number(weaponSkill),
         Number(weaponDamage),
         Number(weaponInjury)
-      )
-    );
+      ),
+    ]);
   }
 
   ///// FELL ABILITIES /////
   console.log(`TOR 2E NPC PARSER | parsing Fell Abilities`);
-  let allFellAbilitiesArr = originalText.match(/FELL ABILITIES: (\D*\d*)+/gm);
-  allFellAbilitiesArr = allFellAbilitiesArr[0].replace('FELL ABILITIES: ', '');
-  allFellAbilitiesArr = allFellAbilitiesArr.split(/\.\n/gm);
+  let allFellAbilitiesArr = originalText
+    .match(/FELL ABILITIES: (\D*\d*)+/gm)[0]
+    .replace('FELL ABILITIES: ', '')
+    .split(/\.\n/gm);
 
   for (let i = 0; i < allFellAbilitiesArr.length; i++) {
-    allFellAbilitiesArr[i] = allFellAbilitiesArr[i].replace('\n', ' ');
-    // Get name and description
-    const [fellAbilitiesName, fellAbilitiesDescription] =
-      allFellAbilitiesArr[i].split('.');
+    const [fellAbilitiesName, fellAbilitiesDescription] = allFellAbilitiesArr[i]
+      .replace('\n', ' ')
+      .split('.');
 
-    npcData.items.push(
-      buildItem(fellAbilitiesName, 'fell-ability', fellAbilitiesDescription)
-    );
+    if (typeof fellAbilitiesDescription !== 'undefined') {
+      actor.createEmbeddedDocuments('Item', [
+        buildItem(
+          fellAbilitiesName,
+          'fell-ability',
+          fellAbilitiesDescription + '.'
+        ),
+      ]);
+    } else {
+      ui.notifications.error(
+        game.i18n.localize(
+          'TOR2E-NPC-PARSER.notifications.fellAbilitiesNotFound'
+        )
+      );
+    }
   }
 
-  Actor.create(npcData);
+  ///// FELL ABILITIES BY TYPE /////
+  if (npcData.name.match('Orc|Goblin')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Hate Sunlight',
+        'fell-ability',
+        'Description can be found on page 148'
+      ),
+    ]);
+    ui.notifications.info(
+      'Hate Sunlight ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+    );
+  } else if (npcData.name.match('troll|Troll')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Hideous Toughness',
+        'fell-ability',
+        'Description can be found on page 151'
+      ),
+    ]);
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Dull-witted',
+        'fell-ability',
+        'Description can be found on page 151'
+      ),
+    ]);
+    ui.notifications.info(
+      'Hideous Toughness and Dull-witted ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+    );
+  } else if (npcData.name.match('wight|Marsh|Wraith')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Deathless',
+        'fell-ability',
+        'Description can be found on page 154'
+      ),
+    ]);
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Heartless',
+        'fell-ability',
+        'Description can be found on page 154'
+      ),
+    ]);
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Strike Fear',
+        'fell-ability',
+        'Description can be found on page 154'
+      ),
+    ]);
+    ui.notifications.info(
+      'Deathless, Heartless, and Strike Fear ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+    );
+  } else if (npcData.name.match('Wolf|Hound')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Great Leap',
+        'fell-ability',
+        'Description can be found on page 156'
+      ),
+    ]);
+    ui.notifications.info(
+      'Great Leap ' +
+        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+    );
+  }
 }
