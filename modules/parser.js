@@ -185,5 +185,70 @@ export async function tor2eParser(input) {
   }
 
   ///// FELL ABILITIES BY TYPE /////
-  if (npcData.name.match('Orc')) console.log(`this creature is an orc`);
+  if (npcData.name.match('Orc|Goblin')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Hate Sunlight',
+        'fell-ability',
+        'Description can be found on page 148'
+      ),
+    ]);
+    ui.notifications.info(
+      'Hate Sunlight was automatically added without description based on creature type.'
+    );
+  } else if (npcData.name.match('troll|Troll')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Hideous Toughness',
+        'fell-ability',
+        'Description can be found on page 151'
+      ),
+    ]);
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Dull-witted',
+        'fell-ability',
+        'Description can be found on page 151'
+      ),
+    ]);
+    ui.notifications.info(
+      'Hideous Toughness and Dull-witted were automatically added without description based on creature type.'
+    );
+  } else if (npcData.name.match('wight|Marsh|Wraith')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Deathless',
+        'fell-ability',
+        'Description can be found on page 154'
+      ),
+    ]);
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Heartless',
+        'fell-ability',
+        'Description can be found on page 154'
+      ),
+    ]);
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Strike Fear',
+        'fell-ability',
+        'Description can be found on page 154'
+      ),
+    ]);
+    ui.notifications.info(
+      'Deathless, Heartless, and Strike Fear were automatically added without description based on creature type.'
+    );
+  } else if (npcData.name.match('Wolf|Hound')) {
+    actor.createEmbeddedDocuments('Item', [
+      buildItem(
+        'Great Leap',
+        'fell-ability',
+        'Description can be found on page 156'
+      ),
+    ]);
+    ui.notifications.info(
+      'Great Leap was automatically added without description based on creature type.'
+    );
+  }
 }
