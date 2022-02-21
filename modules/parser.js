@@ -45,9 +45,9 @@ export async function tor2eParser(input) {
   };
 
   let originalText = input.find('textarea#text-input').val();
-  const [nameFirst] = originalText.split('\n');
 
   ///// NAME /////
+  const [nameFirst] = originalText.split('\n');
   console.log(`TOR 2E NPC PARSER | parsing Name`);
   let nameArray = nameFirst.split(' ');
   for (let i = 0; i < nameArray.length; i++) {
