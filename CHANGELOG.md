@@ -1,3 +1,15 @@
+## v0.0.4
+
+Added localization support for notifications
+Corrected error when parsing with statblocks that included a parry of "-"
+Added error reporting when description cannot be parsed.
+If fell abilities contains only "-" it adds no fell ability
+Automatically adds fell abilities that apply to all of one type
+
+Resolved issues
+* Fell Abilities that apply to all of one type are not automatically added with the description being a page reference for the ability description.
+* Marsh-dweller statblock now parses but without description. This will continue to be looked into but it seems to be a typo so we'll see.
+
 ## v0.0.3
 
 Initial release
