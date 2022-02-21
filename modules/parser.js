@@ -45,15 +45,14 @@ export async function tor2eParser(input) {
   };
 
   let originalText = input.find('textarea#text-input').val();
-  const originalTextArr = originalText.split('\n');
+  const [nameFirst] = originalText.split('\n');
 
   ///// NAME /////
   console.log(`TOR 2E NPC PARSER | parsing Name`);
-  npcData.name = originalTextArr[0];
+  npcData.name = nameFirst;
 
   ///// DESCRIPTION /////
   console.log(`TOR 2E NPC PARSER | parsing Description`);
-  let nameFirst = originalTextArr[0];
   let [nameCaps] = originalText.match(nameFirst.toUpperCase());
 
   if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
@@ -71,10 +70,12 @@ export async function tor2eParser(input) {
 
   //// ATTRIBUTE LEVEL, MIGHT, HATE, PARRY, ARMOUR /////
   console.log(`TOR 2E NPC PARSER | parsing Level, Might, Hate, and Parry`);
-  const attEndMigHateParArmArray = originalText.match(/\d+$/gm);
+
+  const attEndMigHateParArmArray = originalText.match(/^–*\+*\d*$/gm);
 
   // Add level, might, resolve, and parry to npcData
-  const [attributeLevel, endurance, might, hate] = attEndMigHateParArmArray;
+  const [attributeLevel, endurance, might, hate, parry, armour] =
+    attEndMigHateParArmArray;
   npcData.data.attributeLevel.value = Number(attributeLevel);
   npcData.data.endurance.value = Number(endurance);
   npcData.data.endurance.max = Number(endurance);
@@ -83,42 +84,19 @@ export async function tor2eParser(input) {
   npcData.data.hate.value = Number(hate);
   npcData.data.hate.max = Number(hate);
 
-  let parryIsDash = false;
-  if (/^—/m.test(originalText)) {
-    originalText = originalText.replace('—', 0);
-    parryIsDash = true;
-  } else {
+  console.log(attEndMigHateParArmArray);
+  if (/\d/.test(parry)) {
     npcData.data.parry.value = Number(attEndMigHateParArmArray[4]);
+  } else {
+    npcData.data.parry.value = 0;
   }
 
   let actor = await Actor.create(npcData);
 
   ///// ARMOUR /////
-  if (parryIsDash) {
-    actor.createEmbeddedDocuments('Item', [
-      buildItem(
-        'Armour',
-        'armour',
-        '',
-        0,
-        0,
-        0,
-        Number(attEndMigHateParArmArray[4])
-      ),
-    ]);
-  } else {
-    actor.createEmbeddedDocuments('Item', [
-      buildItem(
-        'Armour',
-        'armour',
-        '',
-        0,
-        0,
-        0,
-        Number(attEndMigHateParArmArray[5])
-      ),
-    ]);
-  }
+  actor.createEmbeddedDocuments('Item', [
+    buildItem('Armour', 'armour', '', 0, 0, 0, Number(armour)),
+  ]);
 
   ///// DISTINCTIVE FEATURES /////
   console.log(`TOR 2E NPC PARSER | parsing Distinctive Features`);
