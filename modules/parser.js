@@ -56,6 +56,8 @@ export async function tor2eParser(input) {
   }
   npcData.name = nameArray.join(' ');
 
+  /////
+
   ///// DESCRIPTION /////
   console.log(`TOR 2E NPC PARSER | parsing Description`);
   if (originalText.match(nameFirst.toUpperCase())) {
@@ -130,7 +132,6 @@ export async function tor2eParser(input) {
 
   let [weaponProfs] = originalText.match(weaponProfReg);
   weaponProfs = weaponProfs.split('),');
-  console.log(`TOR 2E NPC Parser | weaponProfs ${weaponProfs}`);
 
   for (let i = 0; i < weaponProfs.length; i++) {
     if (/COMBAT PROFICIENCIES/.test(weaponProfs[i])) {
@@ -138,7 +139,6 @@ export async function tor2eParser(input) {
     }
     // Weapon name
     let [weaponName] = weaponProfs[i].match('\\D*');
-
     const wepSkillDamageInjuryReg = /\d+/g;
     // Weapon skill, damage, and injury
     let [weaponSkill, weaponDamage, weaponInjury] = weaponProfs[i].match(
@@ -164,16 +164,24 @@ export async function tor2eParser(input) {
     .replace('FELL ABILITIES: ', '')
     .split(/\.\n/gm);
 
+  console.log(allFellAbilitiesArr);
   for (let i = 0; i < allFellAbilitiesArr.length; i++) {
     const [fellAbilitiesName, fellAbilitiesDescription] = allFellAbilitiesArr[i]
       .replace('\n', ' ')
       .split('.');
-    actor.createEmbeddedDocuments('Item', [
-      buildItem(
-        fellAbilitiesName,
-        'fell-ability',
-        fellAbilitiesDescription + '.'
-      ),
-    ]);
+
+    if (!fellAbilitiesName) {
+      actor.createEmbeddedDocuments('Item', [
+        buildItem(
+          fellAbilitiesName,
+          'fell-ability',
+          fellAbilitiesDescription + '.'
+        ),
+      ]);
+    } else {
+      ui.notifications.info(
+        'No fell abilities were found for this creature. Please double check to make sure this is correct.'
+      );
+    }
   }
 }
