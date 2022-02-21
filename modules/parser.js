@@ -58,24 +58,28 @@ export async function tor2eParser(input) {
 
   ///// DESCRIPTION /////
   console.log(`TOR 2E NPC PARSER | parsing Description`);
-  let [nameCaps] = originalText.match(nameFirst.toUpperCase());
+  if (originalText.match(nameFirst.toUpperCase())) {
+    let [nameCaps] = originalText.match(nameFirst.toUpperCase());
 
-  if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
-    const betweenNamesReg = new RegExp(nameFirst + '(\\D)+ ' + nameCaps, 'g');
-    const mainDescriptionReg = /^\D*\n/;
-    let description = originalText
-      .match(mainDescriptionReg)[0]
-      .replace(/\n/gm, ' ');
-    console.log(description.match(betweenNamesReg));
+    if (nameCaps.toLowerCase() === nameFirst.toLowerCase()) {
+      const betweenNamesReg = new RegExp(nameFirst + '(\\D)+ ' + nameCaps, 'g');
+      const mainDescriptionReg = /^\D*\n/;
+      let description = originalText
+        .match(mainDescriptionReg)[0]
+        .replace(/\n/gm, ' ');
+      console.log(description.match(betweenNamesReg));
 
-    if (description.match(betweenNamesReg)) {
-      npcData.data.description.value = description
-        .match(betweenNamesReg)[0]
-        .replace(`${nameFirst} `, '')
-        .replace(` ${nameCaps}`, '');
-    } else {
-      ui.notifications.error('Could not parse description.');
+      if (description.match(betweenNamesReg)) {
+        npcData.data.description.value = description
+          .match(betweenNamesReg)[0]
+          .replace(`${nameFirst} `, '')
+          .replace(` ${nameCaps}`, '');
+      } else {
+        ui.notifications.error('Could not parse description.');
+      }
     }
+  } else {
+    ui.notifications.error('Could not parse description');
   }
 
   //// ATTRIBUTE LEVEL, MIGHT, HATE, PARRY, ARMOUR /////
