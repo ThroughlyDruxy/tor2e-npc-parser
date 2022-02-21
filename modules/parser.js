@@ -67,7 +67,6 @@ export async function tor2eParser(input) {
       let description = originalText
         .match(mainDescriptionReg)[0]
         .replace(/\n/gm, ' ');
-      console.log(description.match(betweenNamesReg));
 
       if (description.match(betweenNamesReg)) {
         npcData.data.description.value = description
@@ -106,7 +105,6 @@ export async function tor2eParser(input) {
   npcData.data.hate.value = Number(hate);
   npcData.data.hate.max = Number(hate);
 
-  console.log(attEndMigHateParArmArray);
   if (/\d/.test(parry)) {
     npcData.data.parry.value = Number(attEndMigHateParArmArray[4]);
   } else {
@@ -172,8 +170,6 @@ export async function tor2eParser(input) {
     const [fellAbilitiesName, fellAbilitiesDescription] = allFellAbilitiesArr[i]
       .replace('\n', ' ')
       .split('.');
-
-    console.log(fellAbilitiesName, fellAbilitiesDescription);
 
     if (typeof fellAbilitiesDescription !== 'undefined') {
       actor.createEmbeddedDocuments('Item', [
