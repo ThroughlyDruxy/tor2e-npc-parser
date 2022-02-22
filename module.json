@@ -9,6 +9,7 @@
   ],
   "version": "0.0.3",
   "minimumCoreVersion": "9.249",
+  "compatibleCoreVersion": "9.000",
   "system": ["tor2e"],
   "languages": [
     {
@@ -21,5 +22,5 @@
   "styles": ["styles/main.css"],
   "url": "https://github.com/ThroughlyDruxy/tor2e-npc-parser",
   "manifest": "https://raw.githubusercontent.com/ThroughlyDruxy/tor2e-npc-parser/main/module.json",
-  "download": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/releases/download/v0.0.3/tor2e-npc-parser.zip"
+  "download": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/releases/download/v0.0.4/tor2e-npc-parser.zip"
 }
