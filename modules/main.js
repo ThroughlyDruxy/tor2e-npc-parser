@@ -45,9 +45,21 @@ async function textInputDialog() {
         callback: () => console.log('Chose cancel'),
       },
     },
-    default: 'go',
   });
   dialog.render(true);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key == 13) {
+      if (this.classList.contains('multiline')) {
+        this.textContent += '\n';
+      } else {
+        // Prevent enter key doing its weird <div><br></div> and instead blur the input
+        e.preventDefault();
+        e.target.blur();
+      }
+      return false;
+    }
+  });
 }
 
 ///// HOOKS /////
