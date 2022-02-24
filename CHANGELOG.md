@@ -1,3 +1,6 @@
+## v0.0.5
+Now pressing "Enter" simple does carriage return instead of submitting the text in the dialog.
+
 ## v0.0.4
 
 Added localization support for notifications
