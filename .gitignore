@@ -1,3 +1,5 @@
 .zip
 .prettierrc
 .vscode
+foundry.js
+tor2e-npc-parser.lock
