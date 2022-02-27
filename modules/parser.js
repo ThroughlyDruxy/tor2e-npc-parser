@@ -92,28 +92,46 @@ export async function tor2eParser(input) {
     `TOR 2E NPC PARSER | parsing Level, Endurance, Might, Hate, Parry, and Armour`
   );
 
-  const attEndMigHateParArmArray = originalText.match(/^–*—*\+*\d*$/gm);
+  ///// ATTRIBUTE LEVEL /////
+  const attributeLevel = originalText
+    .match('ATTRIBUTE LEVEL\n\\d+')[0]
+    .match('\\d+')[0];
 
-  // Add level, endurance, might, resolve, and parry to npcData
-  const [attributeLevel, endurance, might, hate, parry, armour] =
-    attEndMigHateParArmArray;
   npcData.data.attributeLevel.value = Number(attributeLevel);
-  npcData.data.endurance.value = Number(endurance);
-  npcData.data.endurance.max = Number(endurance);
+
+  console.log(`TOR 2E NPC PARSER | attributeLevel: ${attributeLevel}`);
+
+  ///// ENDURANCE /////
+  const endReg = /ENDURANCE\n\d+/i;
+  const endurance = originalText.match(endReg)[0].match('\\d+')[0];
+  npcData.data.endurance.value = endurance;
+  npcData.data.endurance.max = endurance;
+
+  ///// MIGHT /////
+  const mightReg = /MIGHT\n\d+/i;
+  const might = originalText.match(mightReg)[0].match('\\d+')[0];
   npcData.data.might.value = Number(might);
   npcData.data.might.max = Number(might);
+
+  ///// HATE /////
+  const hateReg = /(RESOLVE|HATE)\n\d+/i;
+  const hate = originalText.match(hateReg)[0].match('\\d+')[0];
   npcData.data.hate.value = Number(hate);
   npcData.data.hate.max = Number(hate);
 
-  if (/\d/.test(parry)) {
-    npcData.data.parry.value = Number(attEndMigHateParArmArray[4]);
-  } else {
-    npcData.data.parry.value = 0;
-  }
+  ///// PARRY /////
+  const parryReg = /PARRY\n(\+\d|—)/i;
+  const parry = originalText.match(parryReg)[0].match('\\d+|—')[0];
+  Number(parry)
+    ? (npcData.data.parry.value = Number(parry))
+    : (npcData.data.parry.value = 0);
 
   let actor = await Actor.create(npcData);
 
   ///// ARMOUR /////
+  const armourReg = /ARMOUR\n\d/i;
+  const armour = originalText.match(armourReg)[0].match('\\d')[0];
+
   actor.createEmbeddedDocuments('Item', [
     buildItem('Armour', 'armour', '', 0, 0, 0, Number(armour)),
   ]);
