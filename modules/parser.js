@@ -93,17 +93,16 @@ export async function tor2eParser(input) {
   );
 
   ///// ATTRIBUTE LEVEL /////
+  const attributeLevelReg = /ATTRIBUTE LEVEL\n\d+/i;
   const attributeLevel = originalText
-    .match('ATTRIBUTE LEVEL\n\\d+')[0]
+    .match(attributeLevelReg)[0]
     .match('\\d+')[0];
 
   npcData.data.attributeLevel.value = Number(attributeLevel);
 
-  console.log(`TOR 2E NPC PARSER | attributeLevel: ${attributeLevel}`);
-
   ///// ENDURANCE /////
-  const endReg = /ENDURANCE\n\d+/i;
-  const endurance = originalText.match(endReg)[0].match('\\d+')[0];
+  // const endReg = /ENDURANCE\n\d+/i;
+  const endurance = originalText.match(/ENDURANCE\n\d+/i)[0].match('\\d+')[0];
   npcData.data.endurance.value = endurance;
   npcData.data.endurance.max = endurance;
 
@@ -148,17 +147,17 @@ export async function tor2eParser(input) {
   ///// COMBAT PROFICIENCIES /////
   console.log(`TOR 2E NPC PARSER | parsing Combat Proficiencies`);
 
-  const weaponProfReg = /COMBAT PROFICIENCIES: .*\n.*/;
+  const weaponProfReg = /COMBAT PROFICIENCIES: .*(,|\.)\n.*/i;
 
   let [weaponProfs] = originalText.match(weaponProfReg);
-  weaponProfs = weaponProfs.split('),');
+  weaponProfs = weaponProfs.split(/\),|\.\n/);
 
   for (let i = 0; i < weaponProfs.length; i++) {
-    if (/COMBAT PROFICIENCIES/.test(weaponProfs[i])) {
-      weaponProfs[i] = weaponProfs[i].replace('COMBAT PROFICIENCIES: ', '');
+    if (/COMBAT PROFICIENCIES/i.test(weaponProfs[i])) {
+      weaponProfs[i] = weaponProfs[i].replace(/COMBAT PROFICIENCIES: /i, '');
     }
     // Weapon name
-    let [weaponName] = weaponProfs[i].match('\\D*');
+    let [weaponName] = weaponProfs[i].match(/\D*/);
     const wepSkillDamageInjuryReg = /\d+/g;
     // Weapon skill, damage, and injury
     let [weaponSkill, weaponDamage, weaponInjury] = weaponProfs[i].match(
@@ -180,8 +179,8 @@ export async function tor2eParser(input) {
   ///// FELL ABILITIES /////
   console.log(`TOR 2E NPC PARSER | parsing Fell Abilities`);
   let allFellAbilitiesArr = originalText
-    .match(/FELL ABILITIES: (\D*\d*)+/gm)[0]
-    .replace('FELL ABILITIES: ', '')
+    .match(/FELL ABILITIES: (\D*\d*)+/gim)[0]
+    .replace(/FELL ABILITIES: /i, '')
     .split(/\.\n/gm);
 
   for (let i = 0; i < allFellAbilitiesArr.length; i++) {
