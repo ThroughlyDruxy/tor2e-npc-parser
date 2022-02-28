@@ -10,9 +10,7 @@ This module allow for copy and pasting a statblock directly from the book to cre
 3. Choose "Core Rules" or "Adversary Conversion.pdf" from the drop down based on where it was copied from.
 4. Paste it into the textbox and hit Go.
 
-This is currently in Alpha and my first project in JavaScript so please be patient. It is somewhat tested and should work for all of the adversaries in the Core Rule Book. Be sure to start the copying from the name in big red letters (but not all caps) below the red line, then select to the end of Fell abilities. If nothing happens, hit F12 and check the log for errors. Please report any errors on this page in the issues section or DM me on discord at ThroughlyDruxy#4390.
-
-Currently it contains no user-facing error reporting but that will come soon.
+This is currently in Alpha. It is somewhat tested and should work for all of the adversaries in the Core Rule Book. Be sure to start the copying from the name in big red letters (but not all caps) below the red line, then select to the end of Fell abilities. If nothing happens, hit F12 and check the log for errors. Please report any errors on this page in the issues section or DM me on discord at ThroughlyDruxy#4390.
 
 ## For Loremasters
 Currently when an Orc is parsed, Hatred (subject) is added automatically. However not all orcs have this ability and it should be assessed if appropirate or wanted.
