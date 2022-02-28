@@ -1,3 +1,9 @@
+## 0.5.0
+Added support for Adversary Conversion.pdf. Before clicking "Go", make sure to select the source from the dropdown in the dialog. Options are "Core Rules" and "Adversary Conversion.pdf".
+Added error reporting for when parts fail to be parsed.
+Parser now correctly parses creatures with a single weapon.
+
+
 ## v0.0.5
 Now pressing "Enter" simple does carriage return instead of submitting the text in the dialog.
 
