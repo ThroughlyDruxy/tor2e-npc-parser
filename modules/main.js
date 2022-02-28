@@ -48,6 +48,7 @@ async function textInputDialog() {
   });
   dialog.render(true);
 
+  // replace "enter" key with carriage return instead of submitting ducment
   document.addEventListener('keydown', function (e) {
     if (e.key == 13) {
       if (this.classList.contains('multiline')) {

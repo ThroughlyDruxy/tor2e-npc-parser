@@ -4,8 +4,17 @@
       "instruction": "Paste text here and click Go:"
     },
     "notifications": {
+      "nameNotFound": "Could not parse Name",
       "descriptionNotFound": "Could not parse description",
-      "fellAbilitiesNotFound": "No fell abilities were found for this creature. Please double check to make sure this is correct.",
+      "distinctiveFeaturesNotFound": "Could not parse distinctive features.",
+      "attributeLevelNotFound": "Could not parse Attribute Level.",
+      "enduranceNotFound": "Could not parse Endurance.",
+      "mightNotFound": "Could not parse Might.",
+      "hateNotFound": "Could not parse Hate/Resolve.",
+      "parryNotFound": "Could not parse Parry.",
+      "armourNotFound": "Could not parse Armour.",
+      "combatProfsNotFound": "Could not parse Combat proficiencies.",
+      "fellAbilityNotFound": "No fell abilities were found for this creature. Please double check to make sure this is correct.",
       "fellAbilitiesByType": "was automatically added without description based on creature type."
     }
   }
