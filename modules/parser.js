@@ -1,8 +1,8 @@
 import { buildItem } from './buildItem.js';
 
 ///// Parser /////
-export async function tor2eParser(input) {
-  console.log(`TOR2E | tor2eParser() was called`);
+export async function tor1eParser(input) {
+  console.log(`TOR 2E | tor1eParser() was called`);
 
   // Statblock format
   const statblockFormat = input.find('select#text-format').val();
@@ -10,7 +10,7 @@ export async function tor2eParser(input) {
   const npcData = {
     name: 'Generated Actor',
     type: 'adversary',
-    img: 'systems/tor2e/assets/images/tokens/token_adversary.png',
+    img: 'systems/tor1e/assets/images/tokens/token_adversary.png',
     data: {
       attributeLevel: {
         value: null,
@@ -35,7 +35,7 @@ export async function tor2eParser(input) {
       },
     },
     token: {
-      img: 'systems/tor2e/assets/images/tokens/token_adversary.png',
+      img: 'systems/tor1e/assets/images/tokens/token_adversary.png',
       displayBars: 40,
       bar1: {
         attribute: 'endurance',
@@ -50,8 +50,8 @@ export async function tor2eParser(input) {
   let originalText = input.find('textarea#text-input').val();
 
   ///// NAME /////
-  const [nameFirst] = originalText.split('\n');
   console.log(`TOR 2E NPC PARSER | parsing Name`);
+  const [nameFirst] = originalText.split(/\n/).replace(/:/, '');
   let nameArray = nameFirst.split(' ');
   for (let i = 0; i < nameArray.length; i++) {
     nameArray[i] =
@@ -76,14 +76,14 @@ export async function tor2eParser(input) {
       } else {
         ui.notifications.warn(
           game.i18n.localize(
-            'TOR2E-NPC-PARSER.notifications.descriptionNotFound'
+            'TOR1E-NPC-PARSER.notifications.descriptionNotFound'
           )
         );
       }
     }
   } else {
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.descriptionNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.descriptionNotFound')
     );
   }
 
@@ -102,7 +102,7 @@ export async function tor2eParser(input) {
     console.error(error);
     ui.notifications.warn(
       game.i18n.localize(
-        'TOR2E-NPC-PARSER.notifications.attributeLevelNotFound'
+        'TOR1E-NPC-PARSER.notifications.attributeLevelNotFound'
       )
     );
     npcData.data.attributeLevel.value = 0;
@@ -116,7 +116,7 @@ export async function tor2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.enduranceNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.enduranceNotFound')
     );
     npcData.data.endurance.value = 0;
     npcData.data.endurance.max = 0;
@@ -130,7 +130,7 @@ export async function tor2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.mightNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.mightNotFound')
     );
     npcData.data.might.value = 0;
     npcData.data.might.max = 0;
@@ -144,7 +144,7 @@ export async function tor2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.hateNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.hateNotFound')
     );
     npcData.data.hate.value = 0;
     npcData.data.hate.max = 0;
@@ -161,7 +161,7 @@ export async function tor2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.parryNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.parryNotFound')
     );
     npcData.data.parry.value = 0;
   }
@@ -178,7 +178,7 @@ export async function tor2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.armourNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.armourNotFound')
     );
   }
 
@@ -194,7 +194,7 @@ export async function tor2eParser(input) {
     console.error(error);
     ui.notifications.warn(
       game.i18n.localize(
-        'TOR2E-NPC-PARSER.notifications.distinctiveFeaturesNotFound'
+        'TOR1E-NPC-PARSER.notifications.distinctiveFeaturesNotFound'
       )
     );
   }
@@ -231,7 +231,7 @@ export async function tor2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.combatProfsNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.combatProfsNotFound')
     );
   }
 
@@ -263,7 +263,7 @@ export async function tor2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilityNotFound')
+      game.i18n.localize('TOR1E-NPC-PARSER.notifications.fellAbilityNotFound')
     );
   }
 
@@ -287,7 +287,7 @@ export async function tor2eParser(input) {
       ui.notifications.info(
         'Hatred (subject) and Hate Sunlight ' +
           game.i18n.localize(
-            'TOR2E-NPC-PARSER.notifications.fellAbilitiesByType'
+            'TOR1E-NPC-PARSER.notifications.fellAbilitiesByType'
           )
       );
     } else if (statblockFormat === 'adversary-conversion') {
@@ -301,7 +301,7 @@ export async function tor2eParser(input) {
       ui.notifications.info(
         'Hatred (subject) ' +
           game.i18n.localize(
-            'TOR2E-NPC-PARSER.notifications.fellAbilitiesByType'
+            'TOR1E-NPC-PARSER.notifications.fellAbilitiesByType'
           )
       );
     }
@@ -322,7 +322,7 @@ export async function tor2eParser(input) {
     ]);
     ui.notifications.info(
       'Hideous Toughness and Dull-witted ' +
-        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+        game.i18n.localize('TOR1E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (/Wight|Marsh|Wraith|Bog Soldiers|Spectres/i.test(npcData.name)) {
     actor.createEmbeddedDocuments('Item', [
@@ -348,7 +348,7 @@ export async function tor2eParser(input) {
     ]);
     ui.notifications.info(
       'Deathless, Heartless, and Strike Fear ' +
-        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+        game.i18n.localize('TOR1E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (/Wolf|Hound/i.test(npcData.name)) {
     actor.createEmbeddedDocuments('Item', [
@@ -360,7 +360,7 @@ export async function tor2eParser(input) {
     ]);
     ui.notifications.info(
       'Great Leap ' +
-        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+        game.i18n.localize('TOR1E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (/Attercop|Spider/i.test(npcData.name)) {
     actor.createEmbeddedDocuments('Item', [
@@ -379,7 +379,7 @@ export async function tor2eParser(input) {
     ]);
     ui.notifications.info(
       'Poison and Web ' +
-        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+        game.i18n.localize('TOR1E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (/Bat|Shadow/i.test(npcData.name)) {
     actor.createEmbeddedDocuments('Item', [
@@ -405,7 +405,7 @@ export async function tor2eParser(input) {
     ]);
     ui.notifications.info(
       'Hate Sunlight, Deizen of the Dark, and Fell Speed ' +
-        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+        game.i18n.localize('TOR1E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   } else if (/Huorns/i.test(npcData.name)) {
     actor.createEmbeddedDocuments('Item', [
@@ -431,7 +431,7 @@ export async function tor2eParser(input) {
     ]);
     ui.notifications.info(
       'Wandering Huorn, Denizen of the Dark, and Fell Speed ' +
-        game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
+        game.i18n.localize('TOR1E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   }
 }

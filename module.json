@@ -1,12 +1,12 @@
 {
-  "name": "tor2e-npc-parser",
-  "title": "TOR 2e NPC Parser",
-  "description": "Creates an NPC adversary from a copy and pasted statblock. Tested with TOR 2e only.",
+  "name": "tor1e-npc-parser",
+  "title": "TOR 1e NPC Parser",
+  "description": "Creates an NPC adversary from a copy and pasted statblock. Tested with TOR 1e only.",
   "authors": ["ThroughlyDruxy"],
-  "version": "0.5.0",
+  "version": "0.1.0",
   "minimumCoreVersion": "9.249",
   "compatibleCoreVersion": "9.000",
-  "system": ["tor2e"],
+  "system": ["tor1e"],
   "languages": [
     {
       "lang": "en",
@@ -15,7 +15,13 @@
     }
   ],
   "esmodules": ["modules/main.js"],
+<<<<<<< Updated upstream
   "url": "https://github.com/ThroughlyDruxy/tor2e-npc-parser",
   "manifest": "https://raw.githubusercontent.com/ThroughlyDruxy/tor2e-npc-parser/main/module.json",
   "download": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/releases/download/v0.5.0/tor2e-npc-parser.zip"
+=======
+  "url": "https://github.com/ThroughlyDruxy/tor1e-npc-parser",
+  "manifest": "https://raw.githubusercontent.com/ThroughlyDruxy/tor1e-npc-parser/main/module.json",
+  "download": "https://github.com/ThroughlyDruxy/tor1e-npc-parser/releases/download/v0.1.0/tor1e-npc-parser.zip"
+>>>>>>> Stashed changes
 }
