@@ -2,7 +2,7 @@ import { tor2eParser } from './parser.js';
 
 console.log(`TOR 2e NPC Parser initialized`);
 
-class TOR2eParser {
+class ParserButtonVisible {
   static parserButtonVisible() {
     let parserBtn = document.getElementById('tor2e-btn');
     const actorPanel = document.getElementById('actors');
@@ -66,6 +66,6 @@ async function textInputDialog() {
 ///// HOOKS /////
 Hooks.on('renderSidebarTab', (app, html) => {
   if (app.options.id == 'actors') {
-    TOR2eParser.parserButtonVisible();
+    ParserButtonVisible.parserButtonVisible();
   }
 });
