@@ -1,16 +1,16 @@
-import { tor1eParser } from './parser.js';
+import { TOR2eParser } from './parser.js';
 
-console.log(`TOR 1E NPC Parser initialized`);
+console.log(`TOR 2E NPC Parser initialized`);
 
-class TOR1eParser {
+class TOR2eParser {
   static parserButtonVisible() {
-    let parserBtn = document.getElementById('tor1e-btn');
+    let parserBtn = document.getElementById('tor2e-btn');
     const actorPanel = document.getElementById('actors');
     const footer = actorPanel.getElementsByClassName('directory-footer')[0];
     console.log('Creating parser button');
 
     parserBtn = document.createElement('button');
-    parserBtn.innerHTML = `<i id="tor1e-button" class="fas fa-list"></i>Parse Statblock`;
+    parserBtn.innerHTML = `<i id="tor2e-button" class="fas fa-list"></i>Parse Statblock`;
 
     // Do stuff here
     parserBtn.addEventListener('click', textInputDialog);
@@ -21,12 +21,12 @@ class TOR1eParser {
   }
 }
 
-///// Creates dialog and takes data to send to tor1eParser /////
+///// Creates dialog and takes data to send to tor2eParser /////
 async function textInputDialog() {
   console.log('textInputDialog() called');
 
   const html = await renderTemplate(
-    'modules/tor1e-npc-parser/templates/tor1e-npc-parser.hbs',
+    'modules/tor2e-npc-parser/templates/tor2e-npc-parser.hbs',
     {}
   );
 
@@ -37,7 +37,7 @@ async function textInputDialog() {
       go: {
         icon: '<i class="fas fa-check"></i>',
         label: 'Go',
-        callback: html => tor1eParser(html),
+        callback: html => tor2eParser(html),
       },
       cancel: {
         icon: '<i class="fas fa-times"></i>',
@@ -66,6 +66,6 @@ async function textInputDialog() {
 ///// HOOKS /////
 Hooks.on('renderSidebarTab', (app, html) => {
   if (app.options.id == 'actors') {
-    TOR1eParser.parserButtonVisible();
+    TOR2eParser.parserButtonVisible();
   }
 });
