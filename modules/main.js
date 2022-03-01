@@ -1,6 +1,6 @@
-import { TOR2eParser } from './parser.js';
+import { tor2eParser } from './parser.js';
 
-console.log(`TOR 2E NPC Parser initialized`);
+console.log(`TOR 2e NPC Parser initialized`);
 
 class TOR2eParser {
   static parserButtonVisible() {
@@ -31,7 +31,7 @@ async function textInputDialog() {
   );
 
   const dialog = new Dialog({
-    title: 'TOR 1E NPC Parser',
+    title: 'TOR 2e NPC Parser',
     content: html,
     buttons: {
       go: {

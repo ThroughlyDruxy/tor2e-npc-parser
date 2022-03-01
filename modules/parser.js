@@ -1,8 +1,8 @@
 import { buildItem } from './buildItem.js';
 
 ///// Parser /////
-export async function TOR2eParser(input) {
-  console.log(`TOR 2E | tor2eParser() was called`);
+export async function tor2eParser(input) {
+  console.log(`TOR2E | tor2eParser() was called`);
 
   // Statblock format
   const statblockFormat = input.find('select#text-format').val();
@@ -50,8 +50,8 @@ export async function TOR2eParser(input) {
   let originalText = input.find('textarea#text-input').val();
 
   ///// NAME /////
+  const [nameFirst] = originalText.split('\n');
   console.log(`TOR 2E NPC PARSER | parsing Name`);
-  const [nameFirst] = originalText.split(/\n/).replace(/:/, '');
   let nameArray = nameFirst.split(' ');
   for (let i = 0; i < nameArray.length; i++) {
     nameArray[i] =
@@ -231,7 +231,7 @@ export async function TOR2eParser(input) {
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
-      game.i18n.localize('tor2e-NPC-PARSER.notifications.combatProfsNotFound')
+      game.i18n.localize('TOR2E-NPC-PARSER.notifications.combatProfsNotFound')
     );
   }
 
