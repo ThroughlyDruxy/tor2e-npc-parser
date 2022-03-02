@@ -435,6 +435,14 @@ export async function tor2eParser(input) {
     );
   }
 
-  // Updates actor to contain all the creature data
+  // Makes sure the actor has the latest data added and displays the new sheet.
   actor.update(npcData);
+  const torSheet = Actors.registeredSheets.find(
+    x => x.name === 'Tor2eAdversarySheet'
+  );
+  const sheet = new torSheet(actor);
+  sheet.render(true);
+
+  // // Updates actor to contain all the creature data
+  // actor.update(npcData);
 }
