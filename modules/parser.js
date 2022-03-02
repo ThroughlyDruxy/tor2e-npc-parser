@@ -47,11 +47,14 @@ export async function tor2eParser(input) {
     items: [],
   };
 
+  // Creates actor for things to embed into
+  let actor = await Actor.create(npcData);
+
   let originalText = input.find('textarea#text-input').val();
 
   ///// NAME /////
-  const [nameFirst] = originalText.split('\n');
   console.log(`TOR 2E NPC PARSER | parsing Name`);
+  const [nameFirst] = originalText.split('\n');
   let nameArray = nameFirst.split(' ');
   for (let i = 0; i < nameArray.length; i++) {
     nameArray[i] =
@@ -165,9 +168,6 @@ export async function tor2eParser(input) {
     );
     npcData.data.parry.value = 0;
   }
-
-  // Creates actor for things to embed into
-  let actor = await Actor.create(npcData);
 
   ///// ARMOUR /////
   try {
@@ -434,4 +434,15 @@ export async function tor2eParser(input) {
         game.i18n.localize('TOR2E-NPC-PARSER.notifications.fellAbilitiesByType')
     );
   }
+
+  // Makes sure the actor has the latest data added and displays the new sheet.
+  actor.update(npcData);
+  const torSheet = Actors.registeredSheets.find(
+    x => x.name === 'Tor2eAdversarySheet'
+  );
+  const sheet = new torSheet(actor);
+  sheet.render(true);
+
+  // // Updates actor to contain all the creature data
+  // actor.update(npcData);
 }
