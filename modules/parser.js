@@ -442,7 +442,4 @@ export async function tor2eParser(input) {
   );
   const sheet = new torSheet(actor);
   sheet.render(true);
-
-  // // Updates actor to contain all the creature data
-  // actor.update(npcData);
 }
