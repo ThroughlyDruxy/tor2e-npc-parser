@@ -1,21 +1,42 @@
 {
-  "name": "tor2e-npc-parser",
   "title": "TOR 2e NPC Parser",
   "description": "Creates an NPC adversary from a copy and pasted statblock. Tested with TOR 2e only.",
-  "authors": [{ "name": "ThroughlyDruxy" }],
-  "version": "0.5.3",
-  "minimumCoreVersion": "9.249",
-  "compatibleCoreVersion": "11.299",
-  "system": ["tor2e"],
+  "authors": [
+    {
+      "name": "ThroughlyDruxy",
+      "discord": "ThroughlyDruxy#4390",
+      "flags": {}
+    }
+  ],
+  "version": "0.5.5",
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     }
   ],
   "esmodules": ["modules/main.js"],
   "url": "https://github.com/ThroughlyDruxy/tor2e-npc-parser",
   "manifest": "https://raw.githubusercontent.com/ThroughlyDruxy/tor2e-npc-parser/main/module.json",
-  "download": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/releases/download/v0.5.3/tor2e-npc-parser.zip"
+  "download": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/releases/download/v0.5.5/tor2e-npc-parser.zip",
+  "id": "tor2e-npc-parser",
+  "relationships": {
+    "systems": [
+      {
+        "id": "tor2e",
+        "type": "system",
+        "manifest": "https://gitlab.com/herve.darritchon/foundryvtt-tor2e/-/raw/main/src/system.json",
+        "compatibility": {
+          "verified": "2.1.1"
+        }
+      }
+    ]
+  },
+  "compatibility": {
+    "minimum": 10,
+    "verified": "10.291",
+    "maximum": 11
+  }
 }

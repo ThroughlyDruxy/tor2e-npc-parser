@@ -1,10 +1,13 @@
-## 0.5.2
+## v0.5.5
+Now it should finally work with both V10 and V11 of FoundryVTT.
+
+## v0.5.2
 Updated manifest to be compatible with V11
 
-## 0.5.1
+## v0.5.1
 Newly created sheet now opens after being created.
 
-## 0.5.0
+## v0.5.0
 Added support for Adversary Conversion.pdf. Before clicking "Go", make sure to select the source from the dropdown in the dialog. Options are "Core Rules" and "Adversary Conversion.pdf".
 Added error reporting for when parts fail to be parsed.
 Parser now correctly parses creatures with a single weapon.
