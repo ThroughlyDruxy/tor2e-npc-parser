@@ -17,7 +17,9 @@
       "flags": {}
     }
   ],
-  "esmodules": ["modules/main.js"],
+  "esmodules": [
+    "modules/main.js"
+  ],
   "url": "https://github.com/ThroughlyDruxy/tor2e-npc-parser",
   "manifest": "https://raw.githubusercontent.com/ThroughlyDruxy/tor2e-npc-parser/main/module.json",
   "download": "https://github.com/ThroughlyDruxy/tor2e-npc-parser/releases/download/v0.5.5/tor2e-npc-parser.zip",
@@ -35,8 +37,8 @@
     ]
   },
   "compatibility": {
-    "minimum": 10,
+    "minimum": "10",
     "verified": "10.291",
-    "maximum": 11
+    "maximum": "11"
   }
 }
