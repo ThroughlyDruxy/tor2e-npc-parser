@@ -1,3 +1,5 @@
+## v0.6.0
+Updated to work with V12 and briefly checked compatibility with Moria supplement adversaries.
 ## v0.5.5
 Now it should finally work with both V10 and V11 of FoundryVTT.
 
