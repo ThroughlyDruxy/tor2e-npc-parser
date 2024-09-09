@@ -12,7 +12,7 @@ export function buildItem(
     name: '',
     type: 'trait',
     img: 'systems/tor2e/assets/images/icons/distinctive_feature.png',
-    data: {
+    system: {
       description: {
         value: '',
         type: 'String',
@@ -32,7 +32,7 @@ export function buildItem(
     name: '',
     type: 'fell-ability',
     img: 'systems/tor2e/assets/images/icons/adversary_fell-ability.png',
-    data: {
+    system: {
       description: {
         value: '',
         type: 'String',
@@ -57,7 +57,7 @@ export function buildItem(
     name: '',
     type: 'weapon',
     img: '',
-    data: {
+    system: {
       equipped: {
         value: false,
       },
@@ -105,7 +105,7 @@ export function buildItem(
     name: 'Armour',
     type: 'armour',
     img: 'systems/tor2e/assets/images/icons/adversary_armour.png',
-    data: {
+    system: {
       load: {
         value: 0,
       },
@@ -128,40 +128,40 @@ export function buildItem(
   } else if (type === 'fell-ability') {
     fellAbilityData.name = name;
     fellAbilityData.type = type;
-    fellAbilityData.data.description.value = description;
+    fellAbilityData.system.description.value = description;
     return fellAbilityData;
   } else if (type === 'weapon') {
     weaponData.name = name;
     weaponData.type = type;
-    weaponData.data.skill.value = skill;
-    weaponData.data.damage.value = damage;
-    weaponData.data.injury.value = injury;
+    weaponData.system.skill.value = skill;
+    weaponData.system.damage.value = damage;
+    weaponData.system.injury.value = injury;
     // Choose correct image and group
     if (/axe|cudgel|knife|club/i.test(name)) {
       weaponData.img =
         'systems/tor2e/assets/images/icons/adversary_weapon_close.png';
-      weaponData.data.group = 'brawling';
+      weaponData.system.group = 'brawling';
     } else if (/bow/i.test(name)) {
       weaponData.img =
         'systems/tor2e/assets/images/icons/adversary_weapon_ranged.png';
-      weaponData.data.group = 'bows';
+      weaponData.system.group = 'bows';
     } else if (/crush|bite|touch|claws|fangs/i.test(name)) {
       weaponData.img =
         'systems/tor2e/assets/images/icons/adversary_weapon_bestial.png';
-      weaponData.data.group = 'bestial';
+      weaponData.system.group = 'bestial';
     } else if (/spear/i.test(name)) {
       weaponData.img =
         'systems/tor2e/assets/images/icons/adversary_weapon-spear.png';
-      weaponData.data.group = 'spears';
+      weaponData.system.group = 'spears';
     } else if (/sword|scimitar|blade/i.test(name)) {
       weaponData.img =
         'systems/tor2e/assets/images/icons/adversary_weapon-scimitar.png';
-      weaponData.data.group = 'swords';
+      weaponData.system.group = 'swords';
     }
     return weaponData;
   } else if (type === 'armour') {
     armourData.name = 'Armour';
-    armourData.data.protection.value = protection;
+    armourData.system.protection.value = protection;
     return armourData;
   } else {
     console.log(`Type ${type} not found`);

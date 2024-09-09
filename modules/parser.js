@@ -11,7 +11,7 @@ export async function tor2eParser(input) {
     name: 'Generated Actor',
     type: 'adversary',
     img: 'systems/tor2e/assets/images/tokens/token_adversary.png',
-    data: {
+    system: {
       attributeLevel: {
         value: null,
       },
@@ -72,7 +72,7 @@ export async function tor2eParser(input) {
       let description = originalText.match(/^\D*\n/)[0].replace(/\n/gm, ' ');
 
       if (description.match(betweenNamesReg)) {
-        npcData.data.description.value = description
+        npcData.system.description.value = description
           .match(betweenNamesReg)[0]
           .replace(`${nameFirst} `, '')
           .replace(` ${nameCaps}`, '');
@@ -100,7 +100,7 @@ export async function tor2eParser(input) {
     const attributeLevel = originalText
       .match(/ATTRIBUTE LEVEL\n\d+/i)[0]
       .match(/\d+/)[0];
-    npcData.data.attributeLevel.value = Number(attributeLevel);
+    npcData.system.attributeLevel.value = Number(attributeLevel);
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
@@ -108,70 +108,78 @@ export async function tor2eParser(input) {
         'TOR2E-NPC-PARSER.notifications.attributeLevelNotFound'
       )
     );
-    npcData.data.attributeLevel.value = 0;
+    npcData.system.attributeLevel.value = 0;
   }
 
   ///// ENDURANCE /////
   try {
-    const endurance = originalText.match(/ENDURANCE\n\d+/i)[0].match(/\d+/)[0];
-    npcData.data.endurance.value = endurance;
-    npcData.data.endurance.max = endurance;
+    const endurance = originalText
+      .match(/E\s*N\s*D\s*U\s*R\s*A\s*N\s*C\s*E\n\d+/i)[0]
+      .match(/\d+/)[0];
+    npcData.system.endurance.value = endurance;
+    npcData.system.endurance.max = endurance;
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
       game.i18n.localize('TOR2E-NPC-PARSER.notifications.enduranceNotFound')
     );
-    npcData.data.endurance.value = 0;
-    npcData.data.endurance.max = 0;
+    npcData.system.endurance.value = 0;
+    npcData.system.endurance.max = 0;
   }
 
   ///// MIGHT /////
   try {
-    const might = originalText.match(/MIGHT\n\d+/i)[0].match(/\d+/)[0];
-    npcData.data.might.value = Number(might);
-    npcData.data.might.max = Number(might);
+    const might = originalText
+      .match(/M\s*I\s*G\s*H\s*T\n\d+/i)[0]
+      .match(/\d+/)[0];
+    npcData.system.might.value = Number(might);
+    npcData.system.might.max = Number(might);
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
       game.i18n.localize('TOR2E-NPC-PARSER.notifications.mightNotFound')
     );
-    npcData.data.might.value = 0;
-    npcData.data.might.max = 0;
+    npcData.system.might.value = 0;
+    npcData.system.might.max = 0;
   }
 
   ///// HATE /////
   try {
-    const hate = originalText.match(/(RESOLVE|HATE)\n\d+/i)[0].match(/\d+/)[0];
-    npcData.data.hate.value = Number(hate);
-    npcData.data.hate.max = Number(hate);
+    const hate = originalText
+      .match(/(R\s*E\s*S\s*O\s*L\s*V\s*E|H\s*A\s*T\s*E)\n\d+/i)[0]
+      .match(/\d+/)[0];
+    npcData.system.hate.value = Number(hate);
+    npcData.system.hate.max = Number(hate);
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
       game.i18n.localize('TOR2E-NPC-PARSER.notifications.hateNotFound')
     );
-    npcData.data.hate.value = 0;
-    npcData.data.hate.max = 0;
+    npcData.system.hate.value = 0;
+    npcData.system.hate.max = 0;
   }
 
   ///// PARRY /////
   try {
     const parry = originalText
-      .match(/PARRY\n(\+*\d|\D)/i)[0]
+      .match(/P\s*A\s*R\s*R\s*Y\n(\+*\d|\D)/i)[0]
       .match(/\d+|\D$/)[0];
     Number(parry)
-      ? (npcData.data.parry.value = Number(parry))
-      : (npcData.data.parry.value = 0);
+      ? (npcData.system.parry.value = Number(parry))
+      : (npcData.system.parry.value = 0);
   } catch (error) {
     console.error(error);
     ui.notifications.warn(
       game.i18n.localize('TOR2E-NPC-PARSER.notifications.parryNotFound')
     );
-    npcData.data.parry.value = 0;
+    npcData.system.parry.value = 0;
   }
 
   ///// ARMOUR /////
   try {
-    const armour = originalText.match(/ARMOUR\n\d/i)[0].match(/\d+/)[0];
+    const armour = originalText
+      .match(/A\s*R\s*M\s*O\s*U\s*R\n\d/i)[0]
+      .match(/\d+/)[0];
     actor.createEmbeddedDocuments('Item', [
       buildItem('Armour', 'armour', '', 0, 0, 0, Number(armour)),
     ]);
@@ -436,6 +444,7 @@ export async function tor2eParser(input) {
   }
 
   // Makes sure the actor has the latest data added and displays the new sheet.
+  console.log(npcData);
   actor.update(npcData);
   const torSheet = Actors.registeredSheets.find(
     x => x.name === 'Tor2eAdversarySheet'
