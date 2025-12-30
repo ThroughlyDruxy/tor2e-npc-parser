@@ -8,7 +8,7 @@
       "flags": {}
     }
   ],
-  "version": "0.7.0",
+  "version": "0.7.1",
   "languages": [
     {
       "lang": "en",
@@ -35,7 +35,7 @@
     ]
   },
   "compatibility": {
-    "minimum": "13.000",
+    "minimum": "12",
     "verified": "13.351",
     "maximum": "13"
   }
