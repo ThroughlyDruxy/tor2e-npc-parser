@@ -1,3 +1,6 @@
+## v0.7.1
+Added V12 backwards compatibility
+
 ## v0.7.0
 Updated to work with V13.
 
