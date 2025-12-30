@@ -64,7 +64,7 @@ async function textInputDialog() {
 }
 
 ///// HOOKS /////
-Hooks.on('renderSidebarTab', (app, html) => {
+Hooks.on('renderActorDirectory', async (app, html) => {
   if (app.id == 'actors') {
     ParserButtonVisible.parserButtonVisible();
   }
