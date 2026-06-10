@@ -12,6 +12,8 @@ This module allow for copy and pasting a statblock directly from the book to cre
 
 It is somewhat tested and should work for all of the adversaries in the Core Rule Book and Adversary Conversion.pdf. If you would like other books supported, DM me or create an issue here on github. To capture the description be sure to start the copying from the name in big red letters (but not all caps) below the red line, then select to the end of Fell abilities. If you don't want the description you can start copying from just about anywhere and it will throw errors letting you know what you missed. If nothing happens, hit F12 and check the log for errors. Please report any errors on this page in the issues section or DM me on discord at ThroughlyDruxy#4390.
 
+This modules has not been test extensively with all supplements/expansions. Especially Hands of the White Wizard and Hobbit Tales. If you encounter issues, please submit a report to message me on Discord.
+
 ## For Loremasters
 Currently when an Orc is parsed, Hatred (subject) is added automatically. However not all orcs have this ability and it should be assessed if appropirate or wanted.
 
